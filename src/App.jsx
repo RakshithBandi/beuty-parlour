@@ -45,9 +45,13 @@ function App() {
     { id: 3, name: 'Lisa T.', role: 'Nail Artist', specialty: 'Manicure' }
   ]);
   const [customers, setCustomers] = useState([
-    { id: 1001, name: 'Alice Johnson', email: 'alice@example.com', phone: '123-456-7890', lastVisit: 'Oct 24, 2023' },
-    { id: 1002, name: 'Mary Smith', email: 'mary@example.com', phone: '987-654-3210', lastVisit: 'Oct 24, 2023' },
-    { id: 1003, name: 'Sarah Connor', email: 'sarah@resistance.com', phone: '555-0199', lastVisit: 'Oct 25, 2023' }
+    { id: 1, name: 'Khushi', email: 'khushi@gmail.com', phone: '9908123456', regDate: '2023-10-15 10:00:22' },
+    { id: 2, name: 'Rohi Singh', email: 'rohi@gmail.com', phone: '9445234378', regDate: '2023-10-15 11:20:41' },
+    { id: 3, name: 'Abhi Singh', email: 'abhi@gmail.com', phone: '234563849', regDate: '2023-10-15 14:15:20' },
+    { id: 4, name: 'Test Sample', email: 'sample@gmail.com', phone: '234563849', regDate: '2023-08-08 11:15:30' },
+    { id: 5, name: 'Anuj Kumar', email: 'test@test.com', phone: '1234547890', regDate: '2023-05-07 14:22:54' },
+    { id: 6, name: 'Tisa Khan', email: 'tisa@gmail.com', phone: '978578788', regDate: '2023-09-11 14:31:44' },
+    { id: 7, name: 'John Doe', email: 'johndoe@gmail.com', phone: '1452362341', regDate: '2023-09-23 13:50:50' }
   ]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -55,10 +59,11 @@ function App() {
   const [userName, setUserName] = useState('');
   const [showWelcome, setShowWelcome] = useState(false);
   const [bookings, setBookings] = useState([
-    { id: 101, customer: 'Alice Johnson', service: 'Hair Styling & Cutting', date: 'Oct 24, 2023', time: '10:00 AM', price: '$85.00', status: 'Confirmed' },
-    { id: 102, customer: 'Mary Smith', service: 'Luxury Spa Facial', date: 'Oct 24, 2023', time: '11:30 AM', price: '$120.00', status: 'Confirmed' },
-    { id: 201, customer: 'Sarah Connor', service: 'Full Body Massage', date: 'Oct 25, 2023', time: '02:00 PM', price: '$150.00', status: 'Confirmed' },
-    { id: 301, customer: 'Linda Ray', service: 'Premium Manicure', date: 'Oct 26, 2023', time: '09:00 AM', price: '$45.00', status: 'Confirmed' }
+    { id: 101, customer: 'Alice Johnson', service: 'Hair Styling & Cutting', date: 'Oct 24, 2023', time: '10:00 AM', price: 85, status: 'Confirmed' },
+    { id: 102, customer: 'Mary Smith', service: 'Luxury Spa Facial', date: 'Oct 24, 2023', time: '11:30 AM', price: 120, status: 'Confirmed' },
+    { id: 201, customer: 'Sarah Connor', service: 'Full Body Massage', date: 'Oct 25, 2023', time: '02:00 PM', price: 150, status: 'Confirmed' },
+    { id: 301, customer: 'Linda Ray', service: 'Premium Manicure', date: 'Oct 26, 2023', time: '09:00 AM', price: 45, status: 'Confirmed' },
+    { id: 401, customer: 'Khushi', service: 'Waxing', date: 'Oct 26, 2023', time: '12:30 PM', price: 40, status: 'Rejected' }
   ]);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
@@ -513,92 +518,86 @@ function App() {
         if (!isAdmin) {
           return <div style={{ padding: '10rem', textAlign: 'center' }}><h2>Access Denied</h2><p>You must be an administrator to view this page.</p></div>;
         }
+        const stats = [
+           { label: 'Total Customer', value: customers.length, color: '#3F51B5' },
+           { label: 'Total Appointment', value: bookings.length, color: '#607D8B' },
+           { label: 'Total Accepted Apt', value: bookings.filter(b => b.status === 'Confirmed').length, color: '#FF9800' },
+           { label: 'Total Rejected Apt', value: bookings.filter(b => b.status === 'Rejected').length, color: '#673AB7' },
+           { label: 'Total Services', value: services.length, color: '#009688' },
+           { label: 'Today Sales', value: '$' + bookings.filter(b => b.date.includes('26')).reduce((acc, b) => acc + (typeof b.price === 'number' ? b.price : 0), 0), color: '#FF5722' },
+           { label: 'Yesterday Sales', value: '$150', color: '#3F51B5' },
+           { label: 'Last 7 Days Sale', value: '$5600', color: '#607D8B' },
+           { label: 'Total Sales', value: '$10400', color: '#FF5722' }
+        ];
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
             <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif' }}>Admin Dashboard</h2>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center', minWidth: '120px' }}>
-                    <h4 style={{ color: 'var(--primary)', margin: 0 }}>{Object.values(bookings).flat().length}</h4>
-                    <p style={{ fontSize: '0.7rem', margin: 0, textTransform: 'uppercase' }}>Bookings</p>
-                  </div>
-                  <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center', minWidth: '120px' }}>
-                    <h4 style={{ color: 'var(--primary)', margin: 0 }}>{customers.length}</h4>
-                    <p style={{ fontSize: '0.7rem', margin: 0, textTransform: 'uppercase' }}>Customers</p>
-                  </div>
-                </div>
+              <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '3rem' }}>Admin Dashboard</h2>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+                 {stats.map((stat, idx) => (
+                   <div key={idx} style={{ 
+                     display: 'flex', 
+                     justifyContent: 'space-between', 
+                     alignItems: 'center', 
+                     padding: '2.5rem 2rem', 
+                     backgroundColor: stat.color, 
+                     color: 'white', 
+                     borderRadius: '4px',
+                     boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                   }}>
+                      <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '500', opacity: 0.9 }}>{stat.label}</h4>
+                      <span style={{ fontSize: '1.8rem', fontWeight: '700' }}>{stat.value}</span>
+                   </div>
+                 ))}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-                <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                  <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', display: 'flex', justifyContent: 'space-between' }}>
-                    Recent Bookings
-                    <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'var(--primary)', cursor: 'pointer' }}>View All</span>
-                  </h3>
+              <div style={{ marginBottom: '5rem' }}>
+                <h3 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem' }}>Customer List</h3>
+                <div style={{ backgroundColor: 'white', border: '1px solid #ddd', borderRadius: '4px', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
-                      <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                        <th style={{ padding: '1rem 0' }}>CLIENT</th>
-                        <th style={{ padding: '1rem 0' }}>SERVICE</th>
-                        <th style={{ padding: '1rem 0' }}>DATE</th>
-                        <th style={{ padding: '1rem 0' }}>STATUS</th>
+                      <tr style={{ backgroundColor: '#F8F9FA', borderBottom: '1px solid #ddd' }}>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>#</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Name</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Mobile Number</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Email</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Registration Date</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {bookings.slice(0, 5).map(b => (
-                        <tr key={b.id} style={{ borderBottom: '1px solid var(--border-color)', fontSize: '0.9rem' }}>
-                          <td style={{ padding: '1rem 0', fontWeight: '500' }}>{b.customer}</td>
-                          <td style={{ padding: '1rem 0' }}>{b.service}</td>
-                          <td style={{ padding: '1rem 0' }}>{b.date}</td>
-                          <td style={{ padding: '1rem 0' }}>
-                            <span style={{ 
-                              backgroundColor: b.status === 'Confirmed' ? '#E8F5E9' : '#FFF3E0', 
-                              color: b.status === 'Confirmed' ? '#2E7D32' : '#EF6C00', 
-                              padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: '600' 
-                            }}>
-                              {b.status.toUpperCase()}
-                            </span>
-                          </td>
+                      {customers.map((c, idx) => (
+                        <tr key={c.id} style={{ borderBottom: '1px solid #eee' }}>
+                           <td style={{ padding: '1rem' }}>{idx + 1}</td>
+                           <td style={{ padding: '1rem', fontWeight: '600' }}>{c.name}</td>
+                           <td style={{ padding: '1rem' }}>{c.phone}</td>
+                           <td style={{ padding: '1rem' }}>{c.email}</td>
+                           <td style={{ padding: '1rem' }}>{c.regDate}</td>
+                           <td style={{ padding: '1rem' }}>
+                              <div style={{ display: 'flex', gap: '8px' }}>
+                                 <button style={{ padding: '5px 10px', backgroundColor: '#3F51B5', color: 'white', border: 'none', borderRadius: '3px', fontSize: '0.7rem' }}>Assign Services</button>
+                                 <button style={{ padding: '5px 10px', backgroundColor: '#F44336', color: 'white', border: 'none', borderRadius: '3px', fontSize: '0.7rem' }}>Delete</button>
+                              </div>
+                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-
-                <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                   <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>Customer Records</h3>
-                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                     {customers.map(c => (
-                       <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', backgroundColor: 'var(--bg-main)', borderRadius: '12px' }}>
-                         <div>
-                            <p style={{ margin: 0, fontWeight: '600' }}>{c.name}</p>
-                            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.email} | {c.phone}</p>
-                         </div>
-                         <div style={{ textAlign: 'right' }}>
-                            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>Last Visit</p>
-                            <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '500' }}>{c.lastVisit}</p>
-                         </div>
-                       </div>
-                     ))}
-                   </div>
-                </div>
               </div>
 
-              <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>Staff Management</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+              <div>
+                <h3 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem' }}>Staff Management</h3>
+                <div style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', display: 'grid', gap: '1.5rem' }}>
                    {staff.map(member => (
-                     <div key={member.id} style={{ padding: '1.5rem', backgroundColor: 'var(--bg-main)', borderRadius: '12px', textAlign: 'center' }}>
-                        <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>{member.name[0]}</div>
-                        <h4 style={{ margin: '0 0 0.3rem 0' }}>{member.name}</h4>
-                        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--primary)', fontWeight: '600' }}>{member.role}</p>
-                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Expertise: {member.specialty}</p>
+                     <div key={member.id} style={{ padding: '2rem', backgroundColor: 'var(--bg-card)', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+                        <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: 'bold' }}>{member.name[0]}</div>
+                        <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>{member.name}</h4>
+                        <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--primary)', fontWeight: '700', textTransform: 'uppercase' }}>{member.role}</p>
+                        <p style={{ margin: '0.8rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Expertise: {member.specialty}</p>
                      </div>
                    ))}
-                   <div style={{ border: '2px dashed var(--border-color)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease' }} className="add-staff">
-                      <span style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>+ Add Staff</span>
-                   </div>
                 </div>
               </div>
             </div>

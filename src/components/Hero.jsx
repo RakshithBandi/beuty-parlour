@@ -27,7 +27,7 @@ const styles = {
     minHeight: '80vh',
     display: 'flex',
     alignItems: 'center',
-    backgroundImage: 'url("/images/hero.png")',
+    backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.2)), url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     position: 'relative',
