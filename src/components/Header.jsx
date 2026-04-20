@@ -11,7 +11,7 @@ const Header = ({
   toggleTheme, 
   onOpenBooking,
   isLoggedIn,
-  userName,
+  isAdmin,
   onLogout,
   onLoginSuccess,
   isAuthModalOpen,
@@ -24,15 +24,17 @@ const Header = ({
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const navItems = isLoggedIn 
-    ? ['SHOP ALL', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'BOOKINGS', 'ABOUT'] 
+    ? (isAdmin 
+        ? ['CHOICES', 'SALON AT HOME', 'OFFERS', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'ADMIN', 'ABOUT'] 
+        : ['CHOICES', 'SALON AT HOME', 'OFFERS', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'BOOKINGS', 'ABOUT'])
     : ['LOGIN', 'SIGN UP'];
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    if (item === 'BOOKINGS') {
-      onOpenBooking();
-    } else if (item === 'LOGIN' || item === 'SIGN UP') {
+    if (item === 'LOGIN' || item === 'SIGN UP') {
       setIsAuthModalOpen(true);
+    } else if (item === 'ADMIN') {
+      setActiveTab('ADMIN');
     } else {
       setActiveTab(item);
     }
@@ -130,7 +132,7 @@ const Header = ({
           </button>
           <div style={styles.cartContainer}>
             <span className="cart-price-desktop" style={styles.price}>${cartTotal.toFixed(2)}</span>
-            <button style={styles.actionBtn}>
+            <button style={styles.actionBtn} onClick={() => setActiveTab('CHECKOUT')}>
               <ShoppingBag size={20} color="var(--icon-color)" />
               <span style={styles.cartBadge}>{cartCount}</span>
             </button>

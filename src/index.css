@@ -166,3 +166,60 @@ button {
   h2 { font-size: 2.5rem !important; }
   h3 { font-size: 1.8rem !important; }
 }
+
+/* Custom Component Styles */
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.add-staff:hover {
+  border-color: var(--primary);
+  background-color: rgba(179, 142, 125, 0.05);
+  color: var(--primary);
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+table tr:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+[data-theme='dark'] table tr:hover {
+  background-color: rgba(255,255,255,0.02);
+}
+
+input:focus, select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(179, 142, 125, 0.2);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+
+/* Utility to hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

@@ -1,41 +1,46 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Collections = ({ onShopClick }) => {
+const Collections = ({ gender, onShopClick }) => {
+  const categories = {
+    'Women': [
+      { id: 'hair', name: 'Hair Cut & Style', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'skin', name: 'Skin Care', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'massage_1', name: 'Swedish Massage', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'pedi', name: 'Royal Pedicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'bridal', name: 'Bridal Perfection', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'color', name: 'Global Colour', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=300&h=300' }
+    ],
+    'Men': [
+      { id: 'haircut', name: 'Elite Haircut', img: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'reflex', name: 'Reflexology', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'massage_3', name: 'Sports Recovery', img: 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'detox', name: 'Scalp Detox', img: 'https://images.unsplash.com/photo-1590439471364-1923aa580053?auto=format&fit=crop&q=80&w=300&h=300' },
+      { id: 'grooming_pkg', name: 'The Classic Groom', img: 'https://images.unsplash.com/photo-1471333055473-000033ad0810?auto=format&fit=crop&q=80&w=300&h=300' }
+    ]
+  };
+
+  const currentCategories = categories[gender] || [];
+
   return (
     <section className="section" style={styles.section}>
       <div className="container" style={styles.container}>
-        
-        <motion.div 
-          style={{...styles.card, backgroundImage: 'url("/images/makeup.png")'}}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div style={styles.cardContent}>
-            <span style={styles.subtitle}>NEW COLLECTIONS</span>
-            <h3 style={styles.title}>Awesome<br/>Makeup<br/>Kit Gift<br/>Sets</h3>
-            <p style={styles.desc}>Find your unique style.</p>
-            <button className="btn-primary" style={styles.button} onClick={() => onShopClick('MAKEUP')}>SHOP NOW</button>
-          </div>
-        </motion.div>
-
-        <motion.div 
-          style={{...styles.card, backgroundImage: 'url("/images/skincare.png")'}}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <div style={styles.cardContent}>
-            <span style={styles.subtitle}>NEW COLLECTIONS</span>
-            <h3 style={styles.title}>The<br/>Ultimate<br/>Skincare<br/>Regime</h3>
-            <p style={styles.desc}>Find your unique style.</p>
-            <button className="btn-primary" style={styles.button} onClick={() => onShopClick('SKIN CARE')}>SHOP NOW</button>
-          </div>
-        </motion.div>
-
+        <h3 style={styles.sectionTitle}>Explore Our Categories</h3>
+        <div className="no-scrollbar" style={styles.categoryGrid}>
+          {currentCategories.map((cat) => (
+            <motion.div 
+              key={cat.id} 
+              style={styles.categoryItem}
+              whileHover={{ y: -5 }}
+              onClick={() => onShopClick('SERVICES')}
+            >
+              <div style={{...styles.iconCircle, backgroundImage: `url(${cat.img})`}}>
+                {cat.isNew && <span style={styles.newBadge}>New</span>}
+              </div>
+              <span style={styles.categoryName}>{cat.name}</span>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -43,54 +48,61 @@ const Collections = ({ onShopClick }) => {
 
 const styles = {
   section: {
+    padding: '3rem 0',
     backgroundColor: 'var(--bg-main)',
   },
   container: {
+    textAlign: 'left',
+  },
+  sectionTitle: {
+    fontSize: '1.8rem',
+    fontFamily: '"Playfair Display", serif',
+    fontWeight: '700',
+    marginBottom: '2rem',
+    color: 'var(--text-title)',
+  },
+  categoryGrid: {
+    display: 'flex',
+    gap: '2rem',
+    overflowX: 'auto',
+    paddingBottom: '1rem',
+  },
+  categoryItem: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '2rem',
+    alignItems: 'center',
+    gap: '1rem',
+    minWidth: '120px',
+    cursor: 'pointer',
   },
-  '@media (min-width: 768px)': {
-    container: {
-      flexDirection: 'row',
-    }
-  },
-  card: {
-    flex: 1,
-    height: '600px',
+  iconCircle: {
+    width: '100px',
+    height: '100px',
+    borderRadius: '20px',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    padding: '4rem',
-    display: 'flex',
-    alignItems: 'center',
+    backgroundColor: '#F7F2F0',
     position: 'relative',
-    overflow: 'hidden',
-    backgroundColor: 'var(--bg-card)', // fallback
+    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
   },
-  cardContent: {
-    position: 'relative',
-    zIndex: 2,
-    color: '#fff',
+  categoryName: {
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    textAlign: 'center',
+    color: 'var(--text-main)',
+    width: '100%',
   },
-  subtitle: {
-    fontSize: '0.8rem',
-    letterSpacing: '2px',
+  newBadge: {
+    position: 'absolute',
+    top: '-5px',
+    right: '-5px',
+    backgroundColor: '#ff4d4d',
+    color: 'white',
+    fontSize: '0.65rem',
+    padding: '2px 8px',
+    borderRadius: '10px',
+    fontWeight: '700',
     textTransform: 'uppercase',
-    marginBottom: '1.5rem',
-    display: 'block',
-  },
-  title: {
-    fontSize: '3.5rem',
-    lineHeight: 1.1,
-    marginBottom: '1.5rem',
-    fontFamily: '"Playfair Display", serif',
-  },
-  desc: {
-    fontSize: '1.2rem',
-    marginBottom: '2.5rem',
-  },
-  button: {
-    fontWeight: '600'
   }
 };
 

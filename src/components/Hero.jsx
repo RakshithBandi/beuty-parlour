@@ -11,12 +11,11 @@ const Hero = ({ onShopNow }) => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span style={styles.subtitle}>NEW IN TOWN</span>
-          <h2 style={styles.title}>The New Beauty<br/>Collection</h2>
+          <span style={styles.subtitle}>MODERNIZING SALON OPERATIONS</span>
+          <h2 style={styles.title}>Beauty Flow<br/>Management</h2>
           <p style={styles.description}>
-            This new collection brings with it the most exciting lorem ipsum dolor sit amet.
+            Automating daily operations to eliminate errors, data loss, and inefficient manual record keeping.
           </p>
-          <button className="btn-primary" style={styles.button} onClick={onShopNow}>SHOP NOW</button>
         </motion.div>
       </div>
     </section>

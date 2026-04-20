@@ -6,10 +6,12 @@ import Collections from './components/Collections';
 import Features from './components/Features';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
+import GenderSwitcher from './components/GenderSwitcher';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('SHOP ALL');
+  const [activeTab, setActiveTab] = useState('CHOICES');
   const [theme, setTheme] = useState('light');
+  const [gender, setGender] = useState('Women');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -21,24 +23,49 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [expandedService, setExpandedService] = useState(null);
   const [services, setServices] = useState([
-    { id: 1, name: 'Hair Styling & Cutting', img: '/images/salon_service.png', price: '$85.00', duration: '60 min', staff: 'Samantha W.' },
-    { id: 2, name: 'Luxury Spa Facial', img: '/images/spa_service.png', price: '$120.00', duration: '90 min', staff: 'Jessica K.' },
-    { id: 3, name: 'Premium Manicure', img: '/images/nail_service.png', price: '$45.00', duration: '45 min', staff: 'Lisa T.' }
+    { id: 1, name: 'Hair Styling & Cutting', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600', price: '$85.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Expert hair cutting and styling tailored to your face shape and personal style.' },
+    { id: 2, name: 'Luxury Spa Facial', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600', price: '$120.00', duration: '90 min', staffId: 2, targetGender: 'Women', description: 'Rejuvenating facial treatment using premium organic products to restore skin glow.' },
+    { id: 3, name: 'Premium Manicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$45.00', duration: '45 min', staffId: 3, targetGender: 'Women', description: 'Complete nail care including shaping, cuticle work, and long-lasting polish.' },
+    { id: 4, name: 'Full Body Massage', img: 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&q=80&w=600', price: '$150.00', duration: '120 min', staffId: 2, targetGender: 'Men', description: 'Deep tissue therapeutic massage designed specifically for stress relief and muscle recovery.' },
+    { id: 5, name: 'Traditional Shave & Cut', img: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600', price: '$65.00', duration: '45 min', staffId: 1, targetGender: 'Men', description: 'Classic straight razor shave and modern haircut for a refined masculine look.' },
+    { id: 6, name: 'Swedish Wellness Massage', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=600', price: '$135.00', duration: '90 min', staffId: 3, targetGender: 'Women', description: 'Gentle and soothing Swedish massage to improve circulation and promote total relaxation.' },
+    { id: 7, name: 'Aromatherapy Ritual', img: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&q=80&w=600', price: '$110.00', duration: '75 min', staffId: 1, targetGender: 'Women', description: 'Holistic treatment using essential oils to balance the body and mind during a soft-pressure massage.' },
+    { id: 8, name: 'Sports Recovery Therapy', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=600', price: '$145.00', duration: '100 min', staffId: 2, targetGender: 'Men', description: 'High-pressure massage focused on muscle tension release for athletes and active lifestyles.' },
+    { id: 9, name: 'Executive Face & Beard', img: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600', price: '$90.00', duration: '60 min', staffId: 3, targetGender: 'Men', description: 'Full grooming package including facial steam, beard shaping, and revitalizing skin treatment.' },
+    { id: 10, name: 'Royal Spa Pedicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$55.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Luxury foot soak, exfoliation, and massage followed by expert nail shaping and polishing.' },
+    { id: 11, name: 'Bridal Perfection', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=600', price: '$350.00', duration: '240 min', staffId: 2, targetGender: 'Women', description: 'Comprehensive bridal package including hair, makeup, and pre-wedding skin prep.' },
+    { id: 12, name: 'Global Hair Colour', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600', price: '$180.00', duration: '150 min', staffId: 1, targetGender: 'Women', description: 'Seamless, high-shine global hair colouring using premium gentle dyes.' },
+    { id: 13, name: 'The Classic Groom', img: 'https://images.unsplash.com/photo-1471333055473-000033ad0810?auto=format&fit=crop&q=80&w=600', price: '$150.00', duration: '120 min', staffId: 3, targetGender: 'Men', description: 'Ultimate wedding day preparation for grooms, including haircut, facial, and hand grooming.' },
+    { id: 14, name: 'Scalp Detox Therapy', img: 'https://images.unsplash.com/photo-1590439471364-1923aa580053?auto=format&fit=crop&q=80&w=600', price: '$75.00', duration: '50 min', staffId: 1, targetGender: 'Men', description: 'Invigorating scalp treatment and massage to promote hair health and deep cleanliness.' },
+    { id: 15, name: 'Reflexology Session', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=600', price: '$95.00', duration: '60 min', staffId: 2, targetGender: 'Men', description: 'Ancient pressure-point foot therapy to stimulate energy flow and reduce systemic stress.' }
+  ]);
+  const [staff, setStaff] = useState([
+    { id: 1, name: 'Samantha W.', role: 'Senior Stylist', specialty: 'Hair' },
+    { id: 2, name: 'Jessica K.', role: 'Skin Specialist', specialty: 'Facials' },
+    { id: 3, name: 'Lisa T.', role: 'Nail Artist', specialty: 'Manicure' }
+  ]);
+  const [customers, setCustomers] = useState([
+    { id: 1001, name: 'Alice Johnson', email: 'alice@example.com', phone: '123-456-7890', lastVisit: 'Oct 24, 2023' },
+    { id: 1002, name: 'Mary Smith', email: 'mary@example.com', phone: '987-654-3210', lastVisit: 'Oct 24, 2023' },
+    { id: 1003, name: 'Sarah Connor', email: 'sarah@resistance.com', phone: '555-0199', lastVisit: 'Oct 25, 2023' }
   ]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userName, setUserName] = useState('');
   const [showWelcome, setShowWelcome] = useState(false);
-  const [bookings, setBookings] = useState({
-    1: [{ id: 101, client: 'Alice Johnson', date: 'Oct 24, 10:00 AM', price: '$85.00' }, { id: 102, client: 'Mary Smith', date: 'Oct 24, 11:30 AM', price: '$85.00' }],
-    2: [{ id: 201, client: 'Sarah Connor', date: 'Oct 25, 02:00 PM', price: '$120.00' }],
-    3: [{ id: 301, client: 'Linda Ray', date: 'Oct 26, 09:00 AM', price: '$45.00' }]
-  });
+  const [bookings, setBookings] = useState([
+    { id: 101, customer: 'Alice Johnson', service: 'Hair Styling & Cutting', date: 'Oct 24, 2023', time: '10:00 AM', price: '$85.00', status: 'Confirmed' },
+    { id: 102, customer: 'Mary Smith', service: 'Luxury Spa Facial', date: 'Oct 24, 2023', time: '11:30 AM', price: '$120.00', status: 'Confirmed' },
+    { id: 201, customer: 'Sarah Connor', service: 'Full Body Massage', date: 'Oct 25, 2023', time: '02:00 PM', price: '$150.00', status: 'Confirmed' },
+    { id: 301, customer: 'Linda Ray', service: 'Premium Manicure', date: 'Oct 26, 2023', time: '09:00 AM', price: '$45.00', status: 'Confirmed' }
+  ]);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const handleLoginSuccess = (name) => {
     setIsLoggedIn(true);
     setUserName(name);
+    setIsAdmin(name.toLowerCase().includes('admin'));
     setIsAuthModalOpen(false);
     setShowWelcome(true);
     setTimeout(() => setShowWelcome(false), 4000);
@@ -50,21 +77,27 @@ function App() {
   };
 
   const handleBookingSubmit = (newBooking) => {
-    setBookings(prev => ({
+    const service = services.find(s => s.id === parseInt(newBooking.serviceId));
+    setBookings(prev => [
       ...prev,
-      [newBooking.serviceId]: [...(prev[newBooking.serviceId] || []), {
-        id: newBooking.id,
-        client: newBooking.client,
+      {
+        id: Date.now(),
+        customer: newBooking.client,
+        service: service ? service.name : 'Salon Service',
         date: newBooking.date,
-        price: newBooking.price
-      }]
-    }));
+        time: newBooking.time || '10:00 AM',
+        price: service ? service.price : '$0.00',
+        status: 'Pending'
+      }
+    ]);
   };
 
-  const handleEditStaff = (id, currentStaff) => {
-    const newStaff = prompt('Assign new staff member to this service:', currentStaff);
-    if (newStaff && newStaff.trim() !== '') {
-      setServices(prev => prev.map(svc => svc.id === id ? { ...svc, staff: newStaff } : svc));
+  const handleEditStaff = (serviceId) => {
+    const service = services.find(s => s.id === serviceId);
+    const staffNames = staff.map(s => `${s.id}: ${s.name}`).join('\n');
+    const newStaffId = prompt(`Current staff: ${staff.find(s => s.id === service.staffId)?.name}\nAvailable Staff:\n${staffNames}\nEnter Staff ID:`, service.staffId);
+    if (newStaffId && staff.find(s => s.id === parseInt(newStaffId))) {
+      setServices(prev => prev.map(svc => svc.id === serviceId ? { ...svc, staffId: parseInt(newStaffId) } : svc));
     }
   };
 
@@ -93,153 +126,527 @@ function App() {
 
   const renderContent = () => {
     switch(activeTab) {
-      case 'SHOP ALL':
+      case 'CHOICES':
         return (
           <>
-            <Hero onShopNow={() => setActiveTab('MAKEUP')} />
-            <Collections onShopClick={(tab) => setActiveTab(tab)} />
+            <Hero />
+            {!isLoggedIn ? (
+              <div style={{ padding: '4rem 2rem', textAlign: 'center', backgroundColor: 'var(--bg-main)' }}>
+                <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '1.5rem' }}>Experience Luxury</h2>
+                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 2rem' }}>Sign in to explore our personalized beauty services and exclusive men & women grooming collections.</p>
+                <button className="btn-dark" onClick={() => setIsAuthModalOpen(true)}>Login to Start</button>
+              </div>
+            ) : (
+              <div style={{ padding: '4rem 0', backgroundColor: 'var(--bg-main)' }}>
+                <div className="container" style={{ textAlign: 'center' }}>
+                  <h3 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', marginBottom: '3rem' }}>Personalize Your Experience</h3>
+                  
+                  <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '5rem' }}>
+                    <div 
+                      onClick={() => setGender('Women')}
+                      style={{ 
+                        width: '450px', 
+                        height: '550px', 
+                        backgroundImage: 'url("https://images.unsplash.com/photo-1596178060671-7a80dc8059ea?auto=format&fit=crop&q=80&w=800")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '24px',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        border: gender === 'Women' ? '4px solid var(--primary)' : '4px solid transparent',
+                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                      }}
+                      className="gender-card"
+                    >
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '3rem 2rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', color: 'white', textAlign: 'left' }}>
+                        <h4 style={{ fontSize: '2.5rem', margin: 0, fontFamily: '"Playfair Display", serif' }}>Women</h4>
+                        <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>Explores facials, hair styling, and bridal services.</p>
+                      </div>
+                    </div>
+
+                    <div 
+                      onClick={() => setGender('Men')}
+                      style={{ 
+                        width: '450px', 
+                        height: '550px', 
+                        backgroundImage: 'url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=800")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '24px',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        border: gender === 'Men' ? '4px solid #1E90FF' : '4px solid transparent',
+                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                      }}
+                      className="gender-card"
+                    >
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '3rem 2rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', color: 'white', textAlign: 'left' }}>
+                        <h4 style={{ fontSize: '2.5rem', margin: 0, fontFamily: '"Playfair Display", serif' }}>Men</h4>
+                        <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>Grooming, deep tissue massage, and elite haircuts.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Collections gender={gender} onShopClick={(tab) => setActiveTab(tab)} />
+
+                  <div style={{ marginTop: '5rem', textAlign: 'left' }}>
+                    <h3 style={{ fontSize: '1.8rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem' }}>Top Rated Services</h3>
+                    <div style={{ display: 'flex', gap: '1.5rem', overflowX: 'auto', paddingBottom: '1rem', scrollbarWidth: 'none' }}>
+                      {services.filter(s => s.targetGender === gender).slice(0, 4).map(s => (
+                        <div key={s.id} onClick={() => setActiveTab('SERVICES')} style={{ minWidth: '280px', cursor: 'pointer' }}>
+                          <div style={{ width: '100%', height: '180px', borderRadius: '16px', backgroundImage: `url(${s.img})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: '1rem' }}></div>
+                          <h4 style={{ fontSize: '1.1rem', margin: '0 0 0.5rem 0' }}>{s.name}</h4>
+                          <div style={{ display: 'flex', gap: '5px', color: '#FFD700', fontSize: '0.8rem', marginBottom: '0.5rem' }}>★★★★★</div>
+                          <p style={{ fontSize: '0.9rem', color: 'var(--primary)', fontWeight: '700' }}>{s.price}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <Features />
           </>
         );
-      case 'MAKEUP':
-      case 'SKIN CARE':
       case 'HAIR CARE':
         return (
-          <section style={{ padding: '8rem 2rem', textAlign: 'center', minHeight: '60vh', backgroundColor: 'var(--bg-main)' }}>
-            <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>{activeTab} Collection</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}>Explore our handpicked curation of luxurious {activeTab.toLowerCase()} products.</p>
-            <div style={{ marginTop: '3rem', display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {(() => {
-                const products = {
-                  'MAKEUP': [
-                    { id: 'mk-1', name: 'Velvet Matte Lipstick', price: 24.99, img: '/images/lipstick.png' },
-                    { id: 'mk-2', name: 'Luminous Foundation', price: 45.00, img: '/images/makeup_item.png' },
-                    { id: 'mk-3', name: 'Silk Finish Powder', price: 32.50, img: '/images/makeup_item.png' },
-                    { id: 'mk-4', name: 'Eyeshadow Palette', price: 55.00, img: '/images/eyeshadow.png' },
-                    { id: 'mk-5', name: 'Volumizing Mascara', price: 18.99, img: '/images/lipstick.png' },
-                    { id: 'mk-6', name: 'Glow Highlighter', price: 29.00, img: '/images/makeup_item.png' }
-                  ],
-                  'SKIN CARE': [
-                    { id: 'sk-1', name: 'Hydrating Serum', price: 65.00, img: '/images/skincare_item.png' },
-                    { id: 'sk-2', name: 'Rosewater Cleanser', price: 28.00, img: '/images/skincare_item.png' },
-                    { id: 'sk-3', name: 'Night Repair Cream', price: 89.00, img: '/images/moisturizer.png' },
-                    { id: 'sk-4', name: 'Vitamin C Toner', price: 34.00, img: '/images/skincare_item.png' },
-                    { id: 'sk-5', name: 'Sun Defense SPF 50', price: 42.00, img: '/images/skincare_item.png' },
-                    { id: 'sk-6', name: 'Detox Face Mask', price: 38.00, img: '/images/facemask.png' }
-                  ],
-                  'HAIR CARE': [
-                    { id: 'hr-1', name: 'Keratin Shampoo', price: 22.00, img: '/images/shampoo.png' },
-                    { id: 'hr-2', name: 'Argan Oil Serum', price: 35.50, img: '/images/haircare_item.png' },
-                    { id: 'hr-3', name: 'Revitalizing Mask', price: 48.00, img: '/images/conditioner.png' },
-                    { id: 'hr-4', name: 'Color Protect Spray', price: 26.00, img: '/images/haircare_item.png' },
-                    { id: 'hr-5', name: 'Leave-in Conditioner', price: 19.99, img: '/images/shampoo.png' },
-                    { id: 'hr-6', name: 'Scalp Therapy Oil', price: 44.00, img: '/images/haircare_item.png' }
-                  ]
-                };
-
-                return (products[activeTab] || []).map(product => {
-                  const cartItem = cartItems.find(c => c.id === product.id);
-                  const quantity = cartItem ? cartItem.quantity : 0;
-
-                  return (
-                    <div key={product.id} style={{ width: '280px', textAlign: 'left', marginBottom: '2rem' }}>
-                       <div style={{ width: '100%', height: '350px', backgroundColor: 'var(--bg-card)', backgroundImage: `url(${product.img})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '8px', marginBottom: '1rem', transition: 'transform 0.3s ease' }} className="product-card"></div>
-                       <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{product.name}</h4>
-                       <p style={{ fontWeight: '600', color: 'var(--primary)', marginBottom: '1rem' }}>${product.price.toFixed(2)}</p>
-                       
-                       {quantity > 0 ? (
-                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid var(--border-color)', borderRadius: '4px', height: '45px' }}>
-                           <button onClick={() => handleUpdateQuantity(product.id, -1)} style={{ fontSize: '1.2rem', flex: 1, height: '100%' }}>-</button>
-                           <span style={{ fontSize: '1rem', fontWeight: '600', width: '30px', textAlign: 'center' }}>{quantity}</span>
-                           <button onClick={() => handleUpdateQuantity(product.id, 1)} style={{ fontSize: '1.2rem', flex: 1, height: '100%' }}>+</button>
-                         </div>
-                       ) : (
-                         <button 
-                           className="btn-dark" 
-                           style={{ width: '100%', height: '45px', fontSize: '0.85rem', borderRadius: '4px' }}
-                           onClick={() => handleAddToCart(product)}
-                         >
-                           Add To Cart
-                         </button>
-                       )}
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Professional Hair Care</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Expert styling and maintenance using modern digital management.</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                {[
+                  { id: 'hc-1', name: 'Precision Haircut', img: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=500', price: '$45.00' },
+                  { id: 'hc-2', name: 'Deep Conditioning', img: 'https://images.unsplash.com/photo-1527799822367-3188572f344b?auto=format&fit=crop&q=80&w=500', price: '$65.00' },
+                  { id: 'hc-3', name: 'Global Colouring', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=500', price: '$120.00' }
+                ].map(svc => (
+                  <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }} className="service-card">
+                    <div style={{ height: '250px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                    <div style={{ padding: '2rem', textAlign: 'left' }}>
+                      <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
+                      <p style={{ color: 'var(--primary)', fontWeight: '700', marginBottom: '1.5rem' }}>{svc.price}</p>
+                      <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ width: '100%', padding: '0.8rem', borderRadius: '8px' }}>Book Appointment</button>
                     </div>
-                  );
-                });
-              })()}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'SKIN CARE':
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Advanced Skincare</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Rejuvenating treatments tracked via your unique digital profile.</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                {[
+                  { id: 'sc-1', name: 'Hydra Glow Facial', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=500', price: '$110.00' },
+                  { id: 'sc-2', name: 'Anti-Aging Therapy', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=500', price: '$150.00' },
+                  { id: 'sc-3', name: 'Skin Brightening', img: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=500', price: '$95.00' }
+                ].map(svc => (
+                  <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }} className="service-card">
+                    <div style={{ height: '250px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                    <div style={{ padding: '2rem', textAlign: 'left' }}>
+                      <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
+                      <p style={{ color: 'var(--primary)', fontWeight: '700', marginBottom: '1.5rem' }}>{svc.price}</p>
+                      <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ width: '100%', padding: '0.8rem', borderRadius: '8px' }}>Book Appointment</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'MAKEUP':
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Exquisite Makeup</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Professional artistry for your most memorable moments.</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                {[
+                  { id: 'mu-1', name: 'Bridal Transformation', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=500', price: '$250.00' },
+                  { id: 'mu-2', name: 'Evening Glamour', img: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=500', price: '$85.00' },
+                  { id: 'mu-3', name: 'Special Occasion', img: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&q=80&w=500', price: '$120.00' }
+                ].map(svc => (
+                  <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }} className="service-card">
+                    <div style={{ height: '250px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                    <div style={{ padding: '2rem', textAlign: 'left' }}>
+                      <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
+                      <p style={{ color: 'var(--primary)', fontWeight: '700', marginBottom: '1.5rem' }}>{svc.price}</p>
+                      <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ width: '100%', padding: '0.8rem', borderRadius: '8px' }}>Book Appointment</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'SALON AT HOME':
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>Salon at Home</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                   <button onClick={() => setGender('Women')} style={{ padding: '0.8rem 1.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', backgroundColor: gender === 'Women' ? 'var(--primary)' : 'white', color: gender === 'Women' ? 'white' : 'var(--text-main)', fontWeight: '600' }}>Women</button>
+                   <button onClick={() => setGender('Men')} style={{ padding: '0.8rem 1.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', backgroundColor: gender === 'Men' ? '#1E90FF' : 'white', color: gender === 'Men' ? 'white' : 'var(--text-main)', fontWeight: '600' }}>Men</button>
+                </div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Professional beauty services delivered at your doorstep.</p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+                {[
+                  { id: 'sah-1', name: 'Brazilian Waxing', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=500', price: '$40.00', category: 'Waxing', target: 'Women' },
+                  { id: 'sah-2', name: 'Expert Threading', img: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=500', price: '$15.00', category: 'Threading', target: 'Women' },
+                  { id: 'sah-3', name: 'Deluxe Mani-Pedi', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=500', price: '$75.00', category: 'Mani Pedi', target: 'Women' },
+                  { id: 'sah-4', name: 'Insta-Glow CleanUp', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=500', price: '$45.00', category: 'Clean Up', target: 'Women' },
+                  { id: 'sah-5', name: 'Keratin Hair Facial', img: 'https://images.unsplash.com/photo-1527799822367-3188572f344b?auto=format&fit=crop&q=80&w=500', price: '$90.00', category: 'Hair Facial', target: 'Women' },
+                  { id: 'sah-6', name: 'Grooming Wax', img: 'https://images.unsplash.com/photo-1590439471364-1923aa580053?auto=format&fit=crop&q=80&w=500', price: '$35.00', category: 'Waxing', target: 'Men' },
+                  { id: 'sah-7', name: 'Men\'s Mani-Pedi', img: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=500', price: '$60.00', category: 'Mani Pedi', target: 'Men' },
+                  { id: 'sah-8', name: 'Deep Clean Up', img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=500', price: '$50.00', category: 'Clean Up', target: 'Men' }
+                ].filter(s => s.target === gender).map(svc => (
+                  <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }} className="service-card">
+                    <div style={{ height: '220px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                       <span style={{ position: 'absolute', top: '15px', right: '15px', backgroundColor: 'rgba(255,255,255,0.9)', padding: '5px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary)' }}>{svc.category}</span>
+                    </div>
+                    <div style={{ padding: '2rem', textAlign: 'left' }}>
+                      <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
+                      <p style={{ color: 'var(--primary)', fontWeight: '700', marginBottom: '1.5rem', fontSize: '1.2rem' }}>{svc.price}</p>
+                      <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ width: '100%', padding: '1rem', borderRadius: '12px', fontWeight: '600' }}>Schedule at Home</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'OFFERS':
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <h2 style={{ fontSize: '3.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '1.5rem' }}>Exclusive Offers</h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>Indulge in our premium salon experiences with specially curated seasonal discounts and membership packages.</p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
+                {[
+                  {
+                    id: 'offer-1',
+                    title: 'Bridal Perfection Package',
+                    desc: 'Full hair, makeup, and skin prep for your big day. Includes a complimentary trial.',
+                    offer: '20% OFF',
+                    img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=800',
+                    color: '#B38E7D'
+                  },
+                  {
+                    id: 'offer-2',
+                    title: 'Summer Glow Combo',
+                    desc: 'Combine any Facial Ritual with a Full Body Massage for ultimate rejuvenation.',
+                    offer: 'BUY 1 GET 1 AT 50%',
+                    img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800',
+                    color: '#E91E63'
+                  },
+                  {
+                    id: 'offer-3',
+                    title: 'First-Visit Welcome',
+                    desc: 'A special welcome for our new guests on any service above $50.',
+                    offer: 'FLAT $20 OFF',
+                    img: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=800',
+                    color: '#1E90FF'
+                  },
+                  {
+                    id: 'offer-4',
+                    title: 'The Duo Massage Deal',
+                    desc: 'Bring a friend or partner for side-by-side Swedish or Deep Tissue massages.',
+                    offer: '$40 GIFT CARD',
+                    img: 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&q=80&w=800',
+                    color: '#4CAF50'
+                  },
+                  {
+                     id: 'offer-5',
+                     title: 'Global Colour Refresh',
+                     desc: 'Update your look with our master colourists using premium Ammonia-free dyes.',
+                     offer: 'FREE CONDITIONING',
+                     img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=800',
+                     color: '#9C27B0'
+                  },
+                  {
+                    id: 'offer-6',
+                    title: 'Executive Grooming pkg',
+                    desc: 'Elite haircut, shave, and facial steam for the modern gentleman.',
+                    offer: '15% OFF',
+                    img: 'https://images.unsplash.com/photo-1471333055473-000033ad0810?auto=format&fit=crop&q=80&w=800',
+                    color: '#2C2C2C'
+                  }
+                ].map(item => (
+                  <div key={item.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', transition: 'all 0.3s ease' }} className="service-card">
+                    <div style={{ height: '300px', backgroundImage: `url(${item.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                      <div style={{ position: 'absolute', top: '20px', left: '20px', backgroundColor: item.color, color: 'white', padding: '8px 20px', borderRadius: '40px', fontWeight: '800', fontSize: '0.85rem', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', letterSpacing: '1px' }}>
+                        {item.offer}
+                      </div>
+                    </div>
+                    <div style={{ padding: '2.5rem', textAlign: 'left' }}>
+                      <h3 style={{ fontSize: '1.6rem', marginBottom: '1rem', fontFamily: '"Playfair Display", serif' }}>{item.title}</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: '1.6' }}>{item.desc}</p>
+                      <button onClick={() => { setActiveTab('SERVICES'); setIsBookingModalOpen(true); }} className="btn-dark" style={{ width: '100%', padding: '1.2rem', borderRadius: '12px', fontWeight: '700', fontSize: '0.9rem', letterSpacing: '1px' }}>CLAIM THIS OFFER</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'BOOKINGS':
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
+                 <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif' }}>All Bookings</h2>
+                 <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ padding: '0.8rem 1.8rem', borderRadius: '30px' }}>+ New Booking</button>
+              </div>
+
+              <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--border-color)', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid var(--border-color)' }}>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Client</th>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Service</th>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Date & Time</th>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Status</th>
+                      <th style={{ padding: '1.5rem', textAlign: 'right', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((b) => (
+                      <tr key={b.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background-color 0.2s ease' }}>
+                        <td style={{ padding: '1.5rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                             <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                               {b.customer ? b.customer[0] : '?'}
+                             </div>
+                             <span style={{ fontWeight: '600' }}>{b.customer || 'Unknown Client'}</span>
+                          </div>
+                        </td>
+                        <td style={{ padding: '1.5rem' }}>{b.service}</td>
+                        <td style={{ padding: '1.5rem' }}>
+                          <p style={{ margin: 0, fontWeight: '500' }}>{b.date}</p>
+                          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{b.time}</p>
+                        </td>
+                        <td style={{ padding: '1.5rem' }}>
+                          <span style={{ 
+                            padding: '6px 12px', 
+                            borderRadius: '20px', 
+                            fontSize: '0.75rem', 
+                            fontWeight: '700', 
+                            backgroundColor: b.status === 'Confirmed' ? '#E8F5E9' : '#FFF3E0',
+                            color: b.status === 'Confirmed' ? '#2E7D32' : '#EF6C00'
+                          }}>
+                            {b.status}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1.5rem', textAlign: 'right' }}>
+                          <button style={{ color: 'var(--text-muted)', fontSize: '1.1rem', cursor: 'pointer' }}>⋯</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {Object.keys(bookings).length === 0 && (
+                  <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    <p>No active bookings found.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </section>
         );
       case 'SERVICES':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '60vh' }}>
-            <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Parlour Management</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Manage your high-end salon services, staff assignments, and client bookings.</p>
+            <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>{gender}'s Services</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Exquisite treatments designed specifically for {gender.toLowerCase()}.</p>
               
-              {/* Recent Bookings Summary */}
-              {Object.values(bookings).some(arr => arr.length > 0) && (
-                <div style={{ marginBottom: '3rem', padding: '2rem', backgroundColor: '#FDF7F5', border: '1px solid #EED4C8', borderRadius: '12px' }}>
-                  <h4 style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ color: 'var(--primary)' }}>✔</span> Your Recent Confirmations
-                  </h4>
-                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                    {Object.keys(bookings).map(svcId => (
-                      bookings[svcId].map(b => (
-                        <div key={b.id} style={{ backgroundColor: '#fff', padding: '0.8rem 1.2rem', borderRadius: '8px', border: '1px solid #eee', fontSize: '0.9rem' }}>
-                          <strong>{services.find(s => s.id === parseInt(svcId))?.name}:</strong> {b.date}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                {services.filter(s => s.targetGender === gender).map((svc) => {
+                  const assignedStaff = staff.find(s => s.id === svc.staffId);
+                  return (
+                    <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', border: '1px solid var(--border-color)', borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.3s ease' }} className="service-card">
+                      <div style={{ height: '220px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                      <div style={{ padding: '2rem' }}>
+                        <h3 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>{svc.description}</p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '600' }}>
+                          <span style={{ color: 'var(--primary)' }}>{svc.price}</span>
+                          <span style={{ color: 'var(--text-main)' }}>{svc.duration}</span>
                         </div>
-                      ))
-                    )).flat().slice(-3)} {/* Show last 3 */}
-                  </div>
-                </div>
-              )}
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                {services.map((svc) => (
-                  <div key={svc.id} style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-card-alt)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1.5rem', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-                      <div style={{ width: '150px', height: '150px', borderRadius: '8px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                      <div style={{ flex: 1, minWidth: '300px' }}>
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '0.8rem', fontFamily: '"Playfair Display", serif' }}>{svc.name}</h3>
-                        <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-                          <span><strong>Price:</strong> {svc.price}</span>
-                          <span><strong>Duration:</strong> {svc.duration}</span>
-                          <span><strong>Assigned to:</strong> <span style={{ backgroundColor: 'var(--bg-footer)', padding: '2px 8px', borderRadius: '4px', color: 'var(--primary)', fontWeight: '500' }}>{svc.staff}</span></span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem', padding: '10px', backgroundColor: 'var(--bg-main)', borderRadius: '8px' }}>
+                          <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>{assignedStaff?.name[0]}</div>
+                          <div>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0' }}>Assigned Stylist</p>
+                            <p style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)' }}>{assignedStaff?.name}</p>
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                          <button onClick={() => handleEditStaff(svc.id, svc.staff)} className="btn-dark" style={{ padding: '0.6rem 1.5rem', fontSize: '0.8rem', borderRadius: '4px' }}>Edit Staff</button>
-                          <button onClick={() => toggleBookings(svc.id)} style={{ padding: '0.6rem 1.5rem', fontSize: '0.8rem', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-main)', color: 'var(--text-main)', cursor: 'pointer', fontWeight: '600', borderRadius: '4px' }}>
-                            {expandedService === svc.id ? 'Hide Bookings' : 'View Bookings'}
-                          </button>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ flex: 1, padding: '0.8rem', borderRadius: '8px' }}>Book Now</button>
+                          {isAdmin && (
+                            <button onClick={() => handleEditStaff(svc.id)} style={{ padding: '0.8rem', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>⚙</button>
+                          )}
                         </div>
                       </div>
                     </div>
-                    {/* Expandable Bookings Menu */}
-                    {expandedService === svc.id && (
-                      <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
-                        <h4 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--primary)' }}>Upcoming Bookings</h4>
-                        {bookings[svc.id]?.length > 0 ? (
-                          <ul style={{ listStyleType: 'none', padding: 0 }}>
-                            {bookings[svc.id].map(booking => (
-                              <li key={booking.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', marginBottom: '0.5rem', borderRadius: '4px' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                  <span style={{ fontWeight: '600' }}>{booking.client}</span>
-                                  <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{booking.date}</span>
-                                </div>
-                                <div style={{ backgroundColor: 'rgba(179, 142, 125, 0.1)', padding: '4px 10px', borderRadius: '4px', color: 'var(--primary)', fontWeight: '700', fontSize: '0.9rem' }}>
-                                  {booking.price || svc.price}
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p style={{ color: 'var(--text-sub)', fontSize: '0.95rem' }}>No upcoming bookings.</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
+            </div>
+          </section>
+        );
+      case 'ADMIN':
+        if (!isAdmin) {
+          return <div style={{ padding: '10rem', textAlign: 'center' }}><h2>Access Denied</h2><p>You must be an administrator to view this page.</p></div>;
+        }
+        return (
+          <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+                <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif' }}>Admin Dashboard</h2>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center', minWidth: '120px' }}>
+                    <h4 style={{ color: 'var(--primary)', margin: 0 }}>{Object.values(bookings).flat().length}</h4>
+                    <p style={{ fontSize: '0.7rem', margin: 0, textTransform: 'uppercase' }}>Bookings</p>
+                  </div>
+                  <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', textAlign: 'center', minWidth: '120px' }}>
+                    <h4 style={{ color: 'var(--primary)', margin: 0 }}>{customers.length}</h4>
+                    <p style={{ fontSize: '0.7rem', margin: 0, textTransform: 'uppercase' }}>Customers</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                  <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', display: 'flex', justifyContent: 'space-between' }}>
+                    Recent Bookings
+                    <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'var(--primary)', cursor: 'pointer' }}>View All</span>
+                  </h3>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                        <th style={{ padding: '1rem 0' }}>CLIENT</th>
+                        <th style={{ padding: '1rem 0' }}>SERVICE</th>
+                        <th style={{ padding: '1rem 0' }}>DATE</th>
+                        <th style={{ padding: '1rem 0' }}>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bookings.slice(0, 5).map(b => (
+                        <tr key={b.id} style={{ borderBottom: '1px solid var(--border-color)', fontSize: '0.9rem' }}>
+                          <td style={{ padding: '1rem 0', fontWeight: '500' }}>{b.customer}</td>
+                          <td style={{ padding: '1rem 0' }}>{b.service}</td>
+                          <td style={{ padding: '1rem 0' }}>{b.date}</td>
+                          <td style={{ padding: '1rem 0' }}>
+                            <span style={{ 
+                              backgroundColor: b.status === 'Confirmed' ? '#E8F5E9' : '#FFF3E0', 
+                              color: b.status === 'Confirmed' ? '#2E7D32' : '#EF6C00', 
+                              padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: '600' 
+                            }}>
+                              {b.status.toUpperCase()}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                   <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>Customer Records</h3>
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                     {customers.map(c => (
+                       <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', backgroundColor: 'var(--bg-main)', borderRadius: '12px' }}>
+                         <div>
+                            <p style={{ margin: 0, fontWeight: '600' }}>{c.name}</p>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.email} | {c.phone}</p>
+                         </div>
+                         <div style={{ textAlign: 'right' }}>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>Last Visit</p>
+                            <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '500' }}>{c.lastVisit}</p>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                </div>
+              </div>
+
+              <div style={{ backgroundColor: 'var(--bg-card)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem' }}>Staff Management</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+                   {staff.map(member => (
+                     <div key={member.id} style={{ padding: '1.5rem', backgroundColor: 'var(--bg-main)', borderRadius: '12px', textAlign: 'center' }}>
+                        <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>{member.name[0]}</div>
+                        <h4 style={{ margin: '0 0 0.3rem 0' }}>{member.name}</h4>
+                        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--primary)', fontWeight: '600' }}>{member.role}</p>
+                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Expertise: {member.specialty}</p>
+                     </div>
+                   ))}
+                   <div style={{ border: '2px dashed var(--border-color)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease' }} className="add-staff">
+                      <span style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>+ Add Staff</span>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      case 'CHECKOUT':
+        return (
+          <section style={{ padding: '8rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
+            <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+               <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem', textAlign: 'center' }}>Secure Checkout</h2>
+               <div style={{ backgroundColor: 'var(--bg-card)', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
+                 <div style={{ marginBottom: '2rem' }}>
+                    <h4 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Order Summary</h4>
+                    {cartItems.map(item => (
+                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.95rem' }}>
+                        <span>{item.name} x {item.quantity}</span>
+                        <span>${(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                    <div style={{ borderTop: '1px solid var(--border-color)', marginTop: '1rem', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '1.2rem' }}>
+                      <span>Total</span>
+                      <span style={{ color: 'var(--primary)' }}>${cartItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0).toFixed(2)}</span>
+                    </div>
+                 </div>
+
+                 <div style={{ marginBottom: '2rem' }}>
+                   <h4 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Payment Gateway</h4>
+                   <div style={{ padding: '1rem', backgroundColor: 'var(--bg-main)', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '1rem' }}>
+                      <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Card Number</p>
+                      <p style={{ margin: 0, fontSize: '1rem', letterSpacing: '2px' }}>•••• •••• •••• 4242</p>
+                   </div>
+                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-main)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Expiry</p>
+                        <p style={{ margin: 0 }}>12/25</p>
+                     </div>
+                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-main)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>CVV</p>
+                        <p style={{ margin: 0 }}>•••</p>
+                     </div>
+                   </div>
+                 </div>
+
+                 <button className="btn-dark" style={{ width: '100%', padding: '1.2rem', borderRadius: '8px', fontSize: '1.1rem', fontWeight: '600' }} onClick={() => { alert('Payment successful! Your order is being processed.'); setCartItems([]); setActiveTab('CHOICES'); }}>
+                   Complete Purchase
+                 </button>
+                 <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '1rem' }}>🔒 Encryption enabled. Your payment information is secure.</p>
+               </div>
             </div>
           </section>
         );
@@ -329,6 +736,7 @@ function App() {
         toggleTheme={toggleTheme} 
         onOpenBooking={() => setIsBookingModalOpen(true)}
         isLoggedIn={isLoggedIn}
+        isAdmin={isAdmin}
         setIsLoggedIn={setIsLoggedIn}
         userName={userName}
         onLogout={handleLogout}

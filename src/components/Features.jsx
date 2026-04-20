@@ -4,19 +4,19 @@ import { motion } from 'framer-motion';
 const Features = () => {
   const features = [
     {
-      icon: '🚚',
-      title: 'Fast Delivery',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      icon: '✨',
+      title: 'Quick Confirmation',
+      desc: 'Instant digital confirmation for your parlour appointments.'
     },
     {
-      icon: '📦',
-      title: 'Free Shipping',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      icon: '📋',
+      title: 'Digital Records',
+      desc: 'Secure customer profiles and service history management.'
     },
     {
-      icon: '↩️',
-      title: 'Easy Returns',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      icon: '🎁',
+      title: 'Seasonal Offers',
+      desc: 'Affordable service packages and special seasonal discounts.'
     }
   ];
 
