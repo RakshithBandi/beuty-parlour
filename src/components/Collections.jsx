@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Collections = () => {
+const Collections = ({ onShopClick }) => {
   return (
     <section className="section" style={styles.section}>
       <div className="container" style={styles.container}>
@@ -17,7 +17,7 @@ const Collections = () => {
             <span style={styles.subtitle}>NEW COLLECTIONS</span>
             <h3 style={styles.title}>Awesome<br/>Makeup<br/>Kit Gift<br/>Sets</h3>
             <p style={styles.desc}>Find your unique style.</p>
-            <button className="btn-primary" style={styles.button}>SHOP NOW</button>
+            <button className="btn-primary" style={styles.button} onClick={() => onShopClick('MAKEUP')}>SHOP NOW</button>
           </div>
         </motion.div>
 
@@ -32,7 +32,7 @@ const Collections = () => {
             <span style={styles.subtitle}>NEW COLLECTIONS</span>
             <h3 style={styles.title}>The<br/>Ultimate<br/>Skincare<br/>Regime</h3>
             <p style={styles.desc}>Find your unique style.</p>
-            <button className="btn-primary" style={styles.button}>SHOP NOW</button>
+            <button className="btn-primary" style={styles.button} onClick={() => onShopClick('SKIN CARE')}>SHOP NOW</button>
           </div>
         </motion.div>
 

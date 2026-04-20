@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Hero = () => {
+const Hero = ({ onShopNow }) => {
   return (
     <section style={styles.hero}>
       <div className="container" style={styles.container}>
@@ -16,7 +16,7 @@ const Hero = () => {
           <p style={styles.description}>
             This new collection brings with it the most exciting lorem ipsum dolor sit amet.
           </p>
-          <button className="btn-primary" style={styles.button}>SHOP NOW</button>
+          <button className="btn-primary" style={styles.button} onClick={onShopNow}>SHOP NOW</button>
         </motion.div>
       </div>
     </section>

@@ -1,34 +1,54 @@
 import React, { useState } from 'react';
 import { ShoppingBag, User, Sun, Moon } from 'lucide-react';
+import AuthModal from './AuthModal';
 
-const Header = ({ activeTab, setActiveTab, cartItems = [], theme = 'light', toggleTheme }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const Header = ({ 
+  activeTab, 
+  setActiveTab, 
+  cartItems = [], 
+  theme = 'light', 
+  toggleTheme, 
+  onOpenBooking,
+  isLoggedIn,
+  userName,
+  onLogout,
+  onLoginSuccess,
+  isAuthModalOpen,
+  setIsAuthModalOpen
+}) => {
+
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-  const navItems = ['SHOP ALL', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'ABOUT'];
+  const navItems = isLoggedIn 
+    ? ['SHOP ALL', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'BOOKINGS', 'ABOUT'] 
+    : ['LOGIN', 'SIGN UP'];
 
   const handleNavClick = (e, item) => {
     e.preventDefault();
-    setActiveTab(item);
+    if (item === 'BOOKINGS') {
+      onOpenBooking();
+    } else if (item === 'LOGIN' || item === 'SIGN UP') {
+      setIsAuthModalOpen(true);
+    } else {
+      setActiveTab(item);
+    }
   };
 
   const handleUserClick = () => {
-    setShowProfileMenu(!showProfileMenu);
-  };
-
-  const toggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-    setShowProfileMenu(false);
+    if (isLoggedIn) {
+      setShowProfileMenu(!showProfileMenu);
+    } else {
+      setIsAuthModalOpen(true);
+    }
   };
 
   return (
     <header style={styles.header}>
       <div className="container" style={styles.container}>
         <div style={styles.logoContainer}>
-          <h1 style={styles.logoText}>Be Bold</h1>
+          <h1 style={styles.logoText}>Beauty Flow</h1>
           <span style={styles.logoSubText}>BEAUTY STORE</span>
         </div>
         
@@ -59,20 +79,17 @@ const Header = ({ activeTab, setActiveTab, cartItems = [], theme = 'light', togg
             </button>
             {showProfileMenu && (
               <div style={{ position: 'absolute', top: '100%', right: 0, backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '150px', zIndex: 10 }}>
-                {isLoggedIn ? (
-                  <>
-                    <p style={{ margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>Hello, User!</p>
-                    <button onClick={toggleLogin} style={{ width: '100%', textAlign: 'left', padding: '0.5rem 0', color: '#666', cursor: 'pointer' }}>Sign Out</button>
-                  </>
-                ) : (
-                  <>
-                    <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Not logged in</p>
-                    <button onClick={toggleLogin} className="btn-dark" style={{ width: '100%', padding: '0.5rem', fontSize: '0.8rem' }}>Log In</button>
-                  </>
-                )}
+                <p style={{ margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>Hello, {userName}!</p>
+                <button onClick={() => { onLogout(); setShowProfileMenu(false); }} style={{ width: '100%', textAlign: 'left', padding: '0.5rem 0', color: '#666', cursor: 'pointer', border: 'none', background: 'none' }}>Sign Out</button>
               </div>
             )}
           </div>
+          
+          <AuthModal 
+            isOpen={isAuthModalOpen} 
+            onClose={() => setIsAuthModalOpen(false)} 
+            onLoginSuccess={onLoginSuccess}
+          />
           <button style={styles.actionBtn} onClick={toggleTheme}>
             {theme === 'light' ? <Moon size={20} color="var(--icon-color)" /> : <Sun size={20} color="var(--icon-color)" />}
           </button>

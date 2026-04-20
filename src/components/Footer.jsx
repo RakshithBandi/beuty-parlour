@@ -1,6 +1,12 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ onLinkClick }) => {
+  const handleLinkClick = (e, target) => {
+    e.preventDefault();
+    onLinkClick(target);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer style={styles.footer}>
       <div className="container">
@@ -21,7 +27,7 @@ const Footer = () => {
 
         <div style={styles.bottomArea}>
           <div style={styles.logoArea}>
-            <h2 style={styles.logo}>Be Bold</h2>
+            <h2 style={styles.logo}>Beauty Flow</h2>
             <div style={styles.socials}>
               {/* Add social icons here if needed */}
             </div>
@@ -29,9 +35,9 @@ const Footer = () => {
           
           <div style={styles.linksArea}>
             <div style={styles.linksColumn}>
-              <a href="#" style={styles.link}>Shop All</a>
-              <a href="#" style={styles.link}>Makeup</a>
-              <a href="#" style={styles.link}>Skin Care</a>
+              <a href="#" style={styles.link} onClick={(e) => handleLinkClick(e, 'SHOP ALL')}>Shop All</a>
+              <a href="#" style={styles.link} onClick={(e) => handleLinkClick(e, 'MAKEUP')}>Makeup</a>
+              <a href="#" style={styles.link} onClick={(e) => handleLinkClick(e, 'SKIN CARE')}>Skin Care</a>
             </div>
             <div style={styles.linksColumn}>
               <a href="#" style={styles.link}>Refund Policy</a>
