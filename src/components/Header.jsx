@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ShoppingBag, User, Sun, Moon } from 'lucide-react';
+import { ShoppingBag, User, Sun, Moon, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './AuthModal';
 
 const Header = ({ 
@@ -18,6 +19,7 @@ const Header = ({
 }) => {
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
@@ -34,6 +36,7 @@ const Header = ({
     } else {
       setActiveTab(item);
     }
+    setIsMenuOpen(false);
   };
 
   const handleUserClick = () => {
@@ -52,7 +55,7 @@ const Header = ({
           <span style={styles.logoSubText}>BEAUTY STORE</span>
         </div>
         
-        <nav style={styles.nav}>
+        <nav className="nav-desktop">
           <ul style={styles.navList}>
             {navItems.map((item) => (
               <li key={item} style={styles.navItem}>
@@ -71,6 +74,38 @@ const Header = ({
             ))}
           </ul>
         </nav>
+
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              style={styles.mobileMenu}
+            >
+              <button style={styles.closeMenuBtn} onClick={() => setIsMenuOpen(false)}>
+                <X size={24} />
+              </button>
+              <ul style={styles.mobileNavList}>
+                {navItems.map((item) => (
+                  <li key={item} style={styles.mobileNavItem}>
+                    <a 
+                      href="#" 
+                      onClick={(e) => handleNavClick(e, item)}
+                      style={{
+                        ...styles.mobileNavLink,
+                        color: activeTab === item ? 'var(--primary)' : 'var(--text-main)'
+                      }}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div style={styles.actions}>
           <div style={{ position: 'relative' }}>
@@ -94,12 +129,16 @@ const Header = ({
             {theme === 'light' ? <Moon size={20} color="var(--icon-color)" /> : <Sun size={20} color="var(--icon-color)" />}
           </button>
           <div style={styles.cartContainer}>
-            <span style={styles.price}>${cartTotal.toFixed(2)}</span>
+            <span className="cart-price-desktop" style={styles.price}>${cartTotal.toFixed(2)}</span>
             <button style={styles.actionBtn}>
               <ShoppingBag size={20} color="var(--icon-color)" />
               <span style={styles.cartBadge}>{cartCount}</span>
             </button>
           </div>
+
+          <button className="menu-toggle" style={styles.menuToggle} onClick={() => setIsMenuOpen(true)}>
+            <Menu size={24} color="var(--icon-color)" />
+          </button>
         </div>
       </div>
     </header>
@@ -181,7 +220,7 @@ const styles = {
     position: 'absolute',
     top: '-8px',
     right: '-8px',
-    backgroundColor: '#1E90FF', // matching the blue button from image slightly or dark
+    backgroundColor: '#1E90FF',
     color: '#fff',
     fontSize: '0.65rem',
     width: '18px',
@@ -191,6 +230,46 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
+  },
+  menuToggle: {
+    padding: '0.5rem',
+    marginLeft: '0.5rem',
+  },
+  mobileMenu: {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: '85%',
+    maxWidth: '400px',
+    backgroundColor: 'var(--bg-card)',
+    zIndex: 1000,
+    padding: '5rem 3rem',
+    boxShadow: '-10px 0 50px rgba(0,0,0,0.15)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3rem',
+  },
+  closeMenuBtn: {
+    position: 'absolute',
+    top: '2rem',
+    right: '2rem',
+    color: 'var(--text-main)',
+  },
+  mobileNavList: {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2.5rem',
+  },
+  mobileNavLink: {
+    fontSize: '1.8rem',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '2px',
+    fontFamily: '"Playfair Display", serif',
   }
 };
 
