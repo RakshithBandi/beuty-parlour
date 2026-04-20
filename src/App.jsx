@@ -6,12 +6,11 @@ import Collections from './components/Collections';
 import Features from './components/Features';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
-import GenderSwitcher from './components/GenderSwitcher';
 
 function App() {
   const [activeTab, setActiveTab] = useState('CHOICES');
   const [theme, setTheme] = useState('light');
-  const [gender, setGender] = useState('Women');
+  const [gender] = useState('Women');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -26,18 +25,10 @@ function App() {
     { id: 1, name: 'Hair Styling & Cutting', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600', price: '$85.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Expert hair cutting and styling tailored to your face shape and personal style.' },
     { id: 2, name: 'Luxury Spa Facial', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600', price: '$120.00', duration: '90 min', staffId: 2, targetGender: 'Women', description: 'Rejuvenating facial treatment using premium organic products to restore skin glow.' },
     { id: 3, name: 'Premium Manicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$45.00', duration: '45 min', staffId: 3, targetGender: 'Women', description: 'Complete nail care including shaping, cuticle work, and long-lasting polish.' },
-    { id: 4, name: 'Full Body Massage', img: 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&q=80&w=600', price: '$150.00', duration: '120 min', staffId: 2, targetGender: 'Men', description: 'Deep tissue therapeutic massage designed specifically for stress relief and muscle recovery.' },
-    { id: 5, name: 'Traditional Shave & Cut', img: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600', price: '$65.00', duration: '45 min', staffId: 1, targetGender: 'Men', description: 'Classic straight razor shave and modern haircut for a refined masculine look.' },
     { id: 6, name: 'Swedish Wellness Massage', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=600', price: '$135.00', duration: '90 min', staffId: 3, targetGender: 'Women', description: 'Gentle and soothing Swedish massage to improve circulation and promote total relaxation.' },
     { id: 7, name: 'Aromatherapy Ritual', img: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&q=80&w=600', price: '$110.00', duration: '75 min', staffId: 1, targetGender: 'Women', description: 'Holistic treatment using essential oils to balance the body and mind during a soft-pressure massage.' },
-    { id: 8, name: 'Sports Recovery Therapy', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=600', price: '$145.00', duration: '100 min', staffId: 2, targetGender: 'Men', description: 'High-pressure massage focused on muscle tension release for athletes and active lifestyles.' },
-    { id: 9, name: 'Executive Face & Beard', img: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600', price: '$90.00', duration: '60 min', staffId: 3, targetGender: 'Men', description: 'Full grooming package including facial steam, beard shaping, and revitalizing skin treatment.' },
     { id: 10, name: 'Royal Spa Pedicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$55.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Luxury foot soak, exfoliation, and massage followed by expert nail shaping and polishing.' },
-    { id: 11, name: 'Bridal Perfection', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=600', price: '$350.00', duration: '240 min', staffId: 2, targetGender: 'Women', description: 'Comprehensive bridal package including hair, makeup, and pre-wedding skin prep.' },
-    { id: 12, name: 'Global Hair Colour', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=600', price: '$180.00', duration: '150 min', staffId: 1, targetGender: 'Women', description: 'Seamless, high-shine global hair colouring using premium gentle dyes.' },
-    { id: 13, name: 'The Classic Groom', img: 'https://images.unsplash.com/photo-1471333055473-000033ad0810?auto=format&fit=crop&q=80&w=600', price: '$150.00', duration: '120 min', staffId: 3, targetGender: 'Men', description: 'Ultimate wedding day preparation for grooms, including haircut, facial, and hand grooming.' },
-    { id: 14, name: 'Scalp Detox Therapy', img: 'https://images.unsplash.com/photo-1590439471364-1923aa580053?auto=format&fit=crop&q=80&w=600', price: '$75.00', duration: '50 min', staffId: 1, targetGender: 'Men', description: 'Invigorating scalp treatment and massage to promote hair health and deep cleanliness.' },
-    { id: 15, name: 'Reflexology Session', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=600', price: '$95.00', duration: '60 min', staffId: 2, targetGender: 'Men', description: 'Ancient pressure-point foot therapy to stimulate energy flow and reduce systemic stress.' }
+    { id: 11, name: 'Bridal Perfection', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=600', price: '$350.00', duration: '240 min', staffId: 2, targetGender: 'Women', description: 'Comprehensive bridal package including hair, makeup, and pre-wedding skin prep.' }
   ]);
   const [staff, setStaff] = useState([
     { id: 1, name: 'Samantha W.', role: 'Senior Stylist', specialty: 'Hair' },
@@ -138,7 +129,7 @@ function App() {
             {!isLoggedIn ? (
               <div style={{ padding: '4rem 2rem', textAlign: 'center', backgroundColor: 'var(--bg-main)' }}>
                 <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '1.5rem' }}>Experience Luxury</h2>
-                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 2rem' }}>Sign in to explore our personalized beauty services and exclusive men & women grooming collections.</p>
+                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 2rem' }}>Sign in to explore our personalized beauty services and exclusive grooming collections.</p>
                 <button className="btn-dark" onClick={() => setIsAuthModalOpen(true)}>Login to Start</button>
               </div>
             ) : (
@@ -148,48 +139,23 @@ function App() {
                   
                   <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '5rem' }}>
                     <div 
-                      onClick={() => setGender('Women')}
                       style={{ 
-                        width: '450px', 
-                        height: '550px', 
+                        width: '500px', 
+                        height: '600px', 
                         backgroundImage: 'url("https://images.unsplash.com/photo-1596178060671-7a80dc8059ea?auto=format&fit=crop&q=80&w=800")',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         borderRadius: '24px',
-                        cursor: 'pointer',
                         position: 'relative',
                         overflow: 'hidden',
-                        border: gender === 'Women' ? '4px solid var(--primary)' : '4px solid transparent',
+                        border: '4px solid var(--primary)',
                         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                       }}
                       className="gender-card"
                     >
                       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '3rem 2rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', color: 'white', textAlign: 'left' }}>
-                        <h4 style={{ fontSize: '2.5rem', margin: 0, fontFamily: '"Playfair Display", serif' }}>Women</h4>
-                        <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>Explores facials, hair styling, and bridal services.</p>
-                      </div>
-                    </div>
-
-                    <div 
-                      onClick={() => setGender('Men')}
-                      style={{ 
-                        width: '450px', 
-                        height: '550px', 
-                        backgroundImage: 'url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=800")',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        borderRadius: '24px',
-                        cursor: 'pointer',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        border: gender === 'Men' ? '4px solid #1E90FF' : '4px solid transparent',
-                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                      }}
-                      className="gender-card"
-                    >
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '3rem 2rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.8))', color: 'white', textAlign: 'left' }}>
-                        <h4 style={{ fontSize: '2.5rem', margin: 0, fontFamily: '"Playfair Display", serif' }}>Men</h4>
-                        <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>Grooming, deep tissue massage, and elite haircuts.</p>
+                        <h4 style={{ fontSize: '2.5rem', margin: 0, fontFamily: '"Playfair Display", serif' }}>Women's Haven</h4>
+                        <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>Explores facials, hair styling, and bridal services designed for you.</p>
                       </div>
                     </div>
                   </div>
@@ -225,8 +191,7 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
                 {[
                   { id: 'hc-1', name: 'Precision Haircut', img: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=500', price: '$45.00' },
-                  { id: 'hc-2', name: 'Deep Conditioning', img: 'https://images.unsplash.com/photo-1527799822367-3188572f344b?auto=format&fit=crop&q=80&w=500', price: '$65.00' },
-                  { id: 'hc-3', name: 'Global Colouring', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=500', price: '$120.00' }
+                  { id: 'hc-2', name: 'Deep Conditioning', img: 'https://images.unsplash.com/photo-1527799822367-3188572f344b?auto=format&fit=crop&q=80&w=500', price: '$65.00' }
                 ].map(svc => (
                   <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }} className="service-card">
                     <div style={{ height: '250px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
@@ -300,8 +265,7 @@ function App() {
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>Salon at Home</h2>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                   <button onClick={() => setGender('Women')} style={{ padding: '0.8rem 1.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', backgroundColor: gender === 'Women' ? 'var(--primary)' : 'white', color: gender === 'Women' ? 'white' : 'var(--text-main)', fontWeight: '600' }}>Women</button>
-                   <button onClick={() => setGender('Men')} style={{ padding: '0.8rem 1.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', backgroundColor: gender === 'Men' ? '#1E90FF' : 'white', color: gender === 'Men' ? 'white' : 'var(--text-main)', fontWeight: '600' }}>Men</button>
+                   <button style={{ padding: '0.8rem 2.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', backgroundColor: 'var(--primary)', color: 'white', fontWeight: '600' }}>Women</button>
                 </div>
                 <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Professional beauty services delivered at your doorstep.</p>
               </div>
@@ -313,9 +277,6 @@ function App() {
                   { id: 'sah-3', name: 'Deluxe Mani-Pedi', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=500', price: '$75.00', category: 'Mani Pedi', target: 'Women' },
                   { id: 'sah-4', name: 'Insta-Glow CleanUp', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=500', price: '$45.00', category: 'Clean Up', target: 'Women' },
                   { id: 'sah-5', name: 'Keratin Hair Facial', img: 'https://images.unsplash.com/photo-1527799822367-3188572f344b?auto=format&fit=crop&q=80&w=500', price: '$90.00', category: 'Hair Facial', target: 'Women' },
-                  { id: 'sah-6', name: 'Grooming Wax', img: 'https://images.unsplash.com/photo-1590439471364-1923aa580053?auto=format&fit=crop&q=80&w=500', price: '$35.00', category: 'Waxing', target: 'Men' },
-                  { id: 'sah-7', name: 'Men\'s Mani-Pedi', img: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=500', price: '$60.00', category: 'Mani Pedi', target: 'Men' },
-                  { id: 'sah-8', name: 'Deep Clean Up', img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=500', price: '$50.00', category: 'Clean Up', target: 'Men' }
                 ].filter(s => s.target === gender).map(svc => (
                   <div key={svc.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }} className="service-card">
                     <div style={{ height: '220px', backgroundImage: `url(${svc.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -374,22 +335,6 @@ function App() {
                     offer: '$40 GIFT CARD',
                     img: 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&q=80&w=800',
                     color: '#4CAF50'
-                  },
-                  {
-                     id: 'offer-5',
-                     title: 'Global Colour Refresh',
-                     desc: 'Update your look with our master colourists using premium Ammonia-free dyes.',
-                     offer: 'FREE CONDITIONING',
-                     img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=800',
-                     color: '#9C27B0'
-                  },
-                  {
-                    id: 'offer-6',
-                    title: 'Executive Grooming pkg',
-                    desc: 'Elite haircut, shave, and facial steam for the modern gentleman.',
-                    offer: '15% OFF',
-                    img: 'https://images.unsplash.com/photo-1471333055473-000033ad0810?auto=format&fit=crop&q=80&w=800',
-                    color: '#2C2C2C'
                   }
                 ].map(item => (
                   <div key={item.id} style={{ backgroundColor: 'var(--bg-card-alt)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', transition: 'all 0.3s ease' }} className="service-card">
