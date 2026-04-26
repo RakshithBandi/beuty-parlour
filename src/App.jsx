@@ -37,7 +37,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   // API Base URL
-  const API_URL = 'http://localhost:5000/api';
+  const API_URL = 'https://beuty-backend.onrender.com/api';
 
   useEffect(() => {
     fetchData();
@@ -200,7 +200,7 @@ function App() {
             {!isLoggedIn ? (
               <div style={{ padding: '4rem 2rem', textAlign: 'center', backgroundColor: 'var(--bg-main)' }}>
                 <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '1.5rem' }}>Experience Luxury</h2>
-                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 2rem' }}>Sign in to explore our personalized beauty services and exclusive grooming collections.</p>
+                <p style={{ color: 'var(--text-muted)', maxWidth: '1000px', margin: '0 auto 2rem' }}>Sign in to explore our personalized beauty services and exclusive grooming collections.</p>
                 <button className="btn-dark" onClick={() => setIsAuthModalOpen(true)}>Login to Start</button>
               </div>
             ) : (
@@ -255,7 +255,7 @@ function App() {
       case 'HAIR CARE':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Professional Hair Care</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Expert styling and maintenance using modern digital management.</p>
               
@@ -280,7 +280,7 @@ function App() {
       case 'SKIN CARE':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Advanced Skincare</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Rejuvenating treatments tracked via your unique digital profile.</p>
               
@@ -306,7 +306,7 @@ function App() {
       case 'MAKEUP':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>Exquisite Makeup</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Professional artistry for your most memorable moments.</p>
               
@@ -332,7 +332,7 @@ function App() {
       case 'SALON AT HOME':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem' }}>Salon at Home</h2>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
@@ -367,10 +367,10 @@ function App() {
       case 'OFFERS':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <h2 style={{ fontSize: '3.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '1.5rem' }}>Exclusive Offers</h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>Indulge in our premium salon experiences with specially curated seasonal discounts and membership packages.</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '100%', margin: '0 auto' }}>Indulge in our premium salon experiences with specially curated seasonal discounts and membership packages.</p>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
@@ -429,7 +429,7 @@ function App() {
         const customerBookings = bookings.filter(b => b.client === userName);
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
                  <div>
                    <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif' }}>Welcome, {userName}</h2>
@@ -479,7 +479,7 @@ function App() {
                             backgroundColor: '#E8F5E9',
                             color: '#2E7D32'
                           }}>
-                            Confirmed
+                            {b.status || 'Confirmed'}
                           </span>
                         </td>
                       </tr>
@@ -498,7 +498,7 @@ function App() {
       case 'SERVICES':
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '60vh' }}>
-            <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif', marginBottom: '1rem', textAlign: 'center' }}>{gender}'s Services</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', textAlign: 'center', marginBottom: '4rem' }}>Exquisite treatments designed specifically for {gender.toLowerCase()}.</p>
               
@@ -553,7 +553,7 @@ function App() {
         ];
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
               <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '3rem' }}>Admin Dashboard</h2>
               
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
@@ -648,7 +648,7 @@ function App() {
       case 'CHECKOUT':
         return (
           <section style={{ padding: '8rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
-            <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <div className="container" style={{ margin: '0 auto' }}>
                <h2 style={{ fontSize: '2.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem', textAlign: 'center' }}>Secure Checkout</h2>
                <div style={{ backgroundColor: 'var(--bg-card)', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
                  <div style={{ marginBottom: '2rem' }}>
@@ -694,7 +694,7 @@ function App() {
       case 'ABOUT':
         return (
           <section style={{ padding: '8rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '60vh' }}>
-            <div className="container" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+            <div className="container" style={{ margin: '0 auto', textAlign: 'center' }}>
               <h2 style={{ fontSize: '3.5rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem' }}>About Beauty Flow</h2>
               <p style={{ color: 'var(--text-sub)', fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '2rem' }}>
                 At Beauty Flow, we believe that beauty is a true expression of individuality. Established in 2023, our boutique parlour has been dedicated to providing a sanctuary where luxury meets personalized care.
@@ -791,6 +791,7 @@ function App() {
         services={services} 
         onBookingSubmit={handleBookingSubmit}
         userName={userName}
+        setActiveTab={setActiveTab}
       />
       <main>
         {renderContent()}

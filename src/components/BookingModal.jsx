@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Calendar, User, Clock, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const BookingModal = ({ isOpen, onClose, services, onBookingSubmit, userName }) => {
+const BookingModal = ({ isOpen, onClose, services, onBookingSubmit, userName, setActiveTab }) => {
   const [formData, setFormData] = useState({
     serviceId: services.length > 0 ? services[0].id : '',
     clientName: userName || '',
@@ -16,6 +16,12 @@ const BookingModal = ({ isOpen, onClose, services, onBookingSubmit, userName }) 
       setFormData(prev => ({ ...prev, serviceId: services[0].id }));
     }
   }, [services]);
+
+  useEffect(() => {
+    if (userName) {
+      setFormData(prev => ({ ...prev, clientName: userName }));
+    }
+  }, [userName, isOpen]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
@@ -33,7 +39,13 @@ const BookingModal = ({ isOpen, onClose, services, onBookingSubmit, userName }) 
     setTimeout(() => {
       setIsSubmitted(false);
       onClose();
-      setFormData({ serviceId: services[0]?.id || '', clientName: '', date: '', time: '' });
+      setFormData({ 
+        serviceId: services[0]?.id || '', 
+        clientName: userName || '', 
+        date: '', 
+        time: '' 
+      });
+      if (setActiveTab) setActiveTab('DASHBOARD');
     }, 2000);
   };
 

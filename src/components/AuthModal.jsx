@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { X, Mail, Lock, User, Globe } from 'lucide-react';
+import { X, Mail, Lock, User, Globe, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,7 +17,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
     e.preventDefault();
     setError('');
     
-    const endpoint = isLogin ? 'http://localhost:5000/api/login' : 'http://localhost:5000/api/signup';
+    const endpoint = isLogin ? 'https://beuty-backend.onrender.com/api/login' : 'https://beuty-backend.onrender.com/api/signup';
     
     // Prepare payload
     const payload = isLogin 
@@ -111,7 +112,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
             <div style={styles.inputGroup}>
               <Lock size={18} style={styles.icon} />
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"} 
                 name="password"
                 placeholder="Password" 
                 style={styles.input} 
@@ -119,6 +120,13 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                 onChange={handleChange}
                 required 
               />
+              <button 
+                type="button" 
+                onClick={() => setShowPassword(!showPassword)}
+                style={styles.eyeBtn}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
             {isLogin && (
@@ -300,6 +308,18 @@ const styles = {
     cursor: 'pointer',
     padding: 0,
     marginLeft: '4px',
+  },
+  eyeBtn: {
+    position: 'absolute',
+    right: '1rem',
+    color: 'var(--text-muted)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '0.5rem',
+    cursor: 'pointer',
+    background: 'none',
+    border: 'none',
   }
 };
 
