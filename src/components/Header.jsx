@@ -12,6 +12,7 @@ const Header = ({
   onOpenBooking,
   isLoggedIn,
   isAdmin,
+  userName,
   onLogout,
   onLoginSuccess,
   isAuthModalOpen,
@@ -26,7 +27,7 @@ const Header = ({
   const navItems = isLoggedIn 
     ? (isAdmin 
         ? ['CHOICES', 'SALON AT HOME', 'OFFERS', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'ADMIN', 'ABOUT'] 
-        : ['CHOICES', 'SALON AT HOME', 'OFFERS', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'BOOKINGS', 'ABOUT'])
+        : ['CHOICES', 'SALON AT HOME', 'OFFERS', 'MAKEUP', 'SKIN CARE', 'HAIR CARE', 'SERVICES', 'DASHBOARD', 'ABOUT'])
     : ['LOGIN', 'SIGN UP'];
 
   const handleNavClick = (e, item) => {

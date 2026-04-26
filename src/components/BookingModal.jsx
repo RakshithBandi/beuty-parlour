@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Calendar, User, Clock, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const BookingModal = ({ isOpen, onClose, services, onBookingSubmit }) => {
+const BookingModal = ({ isOpen, onClose, services, onBookingSubmit, userName }) => {
   const [formData, setFormData] = useState({
-    serviceId: services[0]?.id || '',
-    clientName: '',
+    serviceId: services.length > 0 ? services[0].id : '',
+    clientName: userName || '',
     date: '',
     time: '',
   });
+
+  // Sync default service when services load
+  useEffect(() => {
+    if (services.length > 0 && !formData.serviceId) {
+      setFormData(prev => ({ ...prev, serviceId: services[0].id }));
+    }
+  }, [services]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {

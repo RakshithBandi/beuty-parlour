@@ -10,14 +10,38 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
     password: '',
   });
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate API call
-    console.log(isLogin ? 'Logging in...' : 'Signing up...', formData);
-    setTimeout(() => {
-      onLoginSuccess(formData.name || formData.email.split('@')[0]);
-      onClose();
-    }, 1000);
+    setError('');
+    
+    const endpoint = isLogin ? 'http://localhost:5000/api/login' : 'http://localhost:5000/api/signup';
+    
+    // Prepare payload
+    const payload = isLogin 
+      ? { username: formData.email, password: formData.password } 
+      : { username: formData.name.replace(/\s/g, '').toLowerCase(), email: formData.email, password: formData.password };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        onLoginSuccess(data.username, data.role === 'admin');
+        onClose();
+      } else {
+        setError(data.detail || 'Authentication failed');
+      }
+    } catch (err) {
+      setError('Connection to server failed');
+      console.error(err);
+    }
   };
 
   const handleChange = (e) => {
@@ -55,6 +79,8 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
             </button>
           </div>
 
+          {error && <div style={{ color: '#F44336', backgroundColor: '#FFEBEE', padding: '0.8rem', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.85rem', textAlign: 'center', fontWeight: '500' }}>{error}</div>}
+
           <form style={styles.form} onSubmit={handleSubmit}>
             {!isLogin && (
               <div style={styles.inputGroup}>
@@ -73,9 +99,9 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
             <div style={styles.inputGroup}>
               <Mail size={18} style={styles.icon} />
               <input 
-                type="email" 
+                type="text" 
                 name="email"
-                placeholder="Email Address" 
+                placeholder="Username or Email" 
                 style={styles.input} 
                 value={formData.email}
                 onChange={handleChange}

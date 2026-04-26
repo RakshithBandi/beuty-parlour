@@ -8,7 +8,12 @@ import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('CHOICES');
+  const [activeTab, setActiveTabState] = useState(localStorage.getItem('activeTab') || 'CHOICES');
+  
+  const setActiveTab = (tab) => {
+    setActiveTabState(tab);
+    localStorage.setItem('activeTab', tab);
+  };
   const [theme, setTheme] = useState('light');
   const [gender] = useState('Women');
 
@@ -21,47 +26,70 @@ function App() {
   };
   const [cartItems, setCartItems] = useState([]);
   const [expandedService, setExpandedService] = useState(null);
-  const [services, setServices] = useState([
-    { id: 1, name: 'Hair Styling & Cutting', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=600', price: '$85.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Expert hair cutting and styling tailored to your face shape and personal style.' },
-    { id: 2, name: 'Luxury Spa Facial', img: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600', price: '$120.00', duration: '90 min', staffId: 2, targetGender: 'Women', description: 'Rejuvenating facial treatment using premium organic products to restore skin glow.' },
-    { id: 3, name: 'Premium Manicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$45.00', duration: '45 min', staffId: 3, targetGender: 'Women', description: 'Complete nail care including shaping, cuticle work, and long-lasting polish.' },
-    { id: 6, name: 'Swedish Wellness Massage', img: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=600', price: '$135.00', duration: '90 min', staffId: 3, targetGender: 'Women', description: 'Gentle and soothing Swedish massage to improve circulation and promote total relaxation.' },
-    { id: 7, name: 'Aromatherapy Ritual', img: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&q=80&w=600', price: '$110.00', duration: '75 min', staffId: 1, targetGender: 'Women', description: 'Holistic treatment using essential oils to balance the body and mind during a soft-pressure massage.' },
-    { id: 10, name: 'Royal Spa Pedicure', img: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=600', price: '$55.00', duration: '60 min', staffId: 1, targetGender: 'Women', description: 'Luxury foot soak, exfoliation, and massage followed by expert nail shaping and polishing.' },
-    { id: 11, name: 'Bridal Perfection', img: 'https://images.unsplash.com/photo-1522337360788-8b13df793f1f?auto=format&fit=crop&q=80&w=600', price: '$350.00', duration: '240 min', staffId: 2, targetGender: 'Women', description: 'Comprehensive bridal package including hair, makeup, and pre-wedding skin prep.' }
-  ]);
+  const [services, setServices] = useState([]);
   const [staff, setStaff] = useState([
     { id: 1, name: 'Samantha W.', role: 'Senior Stylist', specialty: 'Hair' },
     { id: 2, name: 'Jessica K.', role: 'Skin Specialist', specialty: 'Facials' },
     { id: 3, name: 'Lisa T.', role: 'Nail Artist', specialty: 'Manicure' }
   ]);
-  const [customers, setCustomers] = useState([
-    { id: 1, name: 'Khushi', email: 'khushi@gmail.com', phone: '9908123456', regDate: '2023-10-15 10:00:22' },
-    { id: 2, name: 'Rohi Singh', email: 'rohi@gmail.com', phone: '9445234378', regDate: '2023-10-15 11:20:41' },
-    { id: 3, name: 'Abhi Singh', email: 'abhi@gmail.com', phone: '234563849', regDate: '2023-10-15 14:15:20' },
-    { id: 4, name: 'Test Sample', email: 'sample@gmail.com', phone: '234563849', regDate: '2023-08-08 11:15:30' },
-    { id: 5, name: 'Anuj Kumar', email: 'test@test.com', phone: '1234547890', regDate: '2023-05-07 14:22:54' },
-    { id: 6, name: 'Tisa Khan', email: 'tisa@gmail.com', phone: '978578788', regDate: '2023-09-11 14:31:44' },
-    { id: 7, name: 'John Doe', email: 'johndoe@gmail.com', phone: '1452362341', regDate: '2023-09-23 13:50:50' }
-  ]);
+  const [customers, setCustomers] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // API Base URL
+  const API_URL = 'http://localhost:5000/api';
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const [svcRes, bkgRes, custRes] = await Promise.all([
+        fetch(`${API_URL}/services`),
+        fetch(`${API_URL}/bookings`),
+        fetch(`${API_URL}/customers`)
+      ]);
+      
+      const svcData = await svcRes.json();
+      const bkgData = await bkgRes.json();
+      const custData = await custRes.json();
+
+      // Map backend services to frontend format (adding missing fields for UI)
+      const mappedServices = svcData.map(s => ({
+        ...s,
+        targetGender: 'Women', // Default for now
+        description: s.description || 'Premium beauty treatment performed by our expert stylists.'
+      }));
+
+      setServices(mappedServices);
+      setBookings(bkgData);
+      setCustomers(custData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'true');
+  const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showWelcome, setShowWelcome] = useState(false);
-  const [bookings, setBookings] = useState([
-    { id: 101, customer: 'Alice Johnson', service: 'Hair Styling & Cutting', date: 'Oct 24, 2023', time: '10:00 AM', price: 85, status: 'Confirmed' },
-    { id: 102, customer: 'Mary Smith', service: 'Luxury Spa Facial', date: 'Oct 24, 2023', time: '11:30 AM', price: 120, status: 'Confirmed' },
-    { id: 201, customer: 'Sarah Connor', service: 'Full Body Massage', date: 'Oct 25, 2023', time: '02:00 PM', price: 150, status: 'Confirmed' },
-    { id: 301, customer: 'Linda Ray', service: 'Premium Manicure', date: 'Oct 26, 2023', time: '09:00 AM', price: 45, status: 'Confirmed' },
-    { id: 401, customer: 'Khushi', service: 'Waxing', date: 'Oct 26, 2023', time: '12:30 PM', price: 40, status: 'Rejected' }
-  ]);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  const handleLoginSuccess = (name) => {
+  const handleLoginSuccess = (name, isAdminRole) => {
     setIsLoggedIn(true);
     setUserName(name);
-    setIsAdmin(name.toLowerCase().includes('admin'));
+    setIsAdmin(isAdminRole);
+    
+    // Save to localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('isAdmin', isAdminRole ? 'true' : 'false');
+
     setIsAuthModalOpen(false);
     setShowWelcome(true);
     setTimeout(() => setShowWelcome(false), 4000);
@@ -70,22 +98,65 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserName('');
+    setIsAdmin(false);
+    
+    // Clear localStorage
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('isAdmin');
   };
 
-  const handleBookingSubmit = (newBooking) => {
-    const service = services.find(s => s.id === parseInt(newBooking.serviceId));
-    setBookings(prev => [
-      ...prev,
-      {
-        id: Date.now(),
-        customer: newBooking.client,
-        service: service ? service.name : 'Salon Service',
+  const handleBookingSubmit = async (newBooking) => {
+    try {
+      const bookingPayload = {
+        service_id: parseInt(newBooking.serviceId),
+        client: newBooking.client,
         date: newBooking.date,
-        time: newBooking.time || '10:00 AM',
-        price: service ? service.price : '$0.00',
-        status: 'Pending'
+        price: newBooking.price || ""
+      };
+
+      if (isNaN(bookingPayload.service_id)) {
+        console.error("Invalid service_id:", newBooking.serviceId);
+        return;
       }
-    ]);
+
+      const response = await fetch(`${API_URL}/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingPayload)
+      });
+      
+      if (response.ok) {
+        fetchData(); // Refresh data from server
+      }
+    } catch (error) {
+      console.error('Error creating booking:', error);
+    }
+  };
+
+  const handleAddService = async (newService) => {
+    try {
+      const response = await fetch(`${API_URL}/services`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newService)
+      });
+      if (response.ok) fetchData();
+    } catch (error) {
+      console.error('Error adding service:', error);
+    }
+  };
+
+  const handleDeleteService = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this service?')) return;
+    try {
+      const response = await fetch(`${API_URL}/services/${id}`, {
+        method: 'DELETE'
+      });
+      if (response.ok) fetchData();
+    } catch (error) {
+      console.error('Error deleting service:', error);
+    }
   };
 
   const handleEditStaff = (serviceId) => {
@@ -354,64 +425,70 @@ function App() {
             </div>
           </section>
         );
-      case 'BOOKINGS':
+      case 'DASHBOARD':
+        const customerBookings = bookings.filter(b => b.client === userName);
         return (
           <section style={{ padding: '6rem 2rem', backgroundColor: 'var(--bg-main)', minHeight: '80vh' }}>
             <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
-                 <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif' }}>All Bookings</h2>
-                 <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ padding: '0.8rem 1.8rem', borderRadius: '30px' }}>+ New Booking</button>
+                 <div>
+                   <h2 style={{ fontSize: '3rem', fontFamily: '"Playfair Display", serif' }}>Welcome, {userName}</h2>
+                   <p style={{ color: 'var(--text-muted)' }}>Manage your appointments and beauty profile.</p>
+                 </div>
+                 <button onClick={() => setIsBookingModalOpen(true)} className="btn-dark" style={{ padding: '0.8rem 1.8rem', borderRadius: '30px' }}>+ New Appointment</button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+                <div style={{ backgroundColor: '#E3F2FD', padding: '2rem', borderRadius: '16px', border: '1px solid #BBDEFB' }}>
+                  <p style={{ fontSize: '0.9rem', color: '#1976D2', fontWeight: '600' }}>Total Visits</p>
+                  <h3 style={{ fontSize: '2rem', margin: '0.5rem 0' }}>{customerBookings.length}</h3>
+                </div>
+                <div style={{ backgroundColor: '#F1F8E9', padding: '2rem', borderRadius: '16px', border: '1px solid #DCEDC8' }}>
+                  <p style={{ fontSize: '0.9rem', color: '#388E3C', fontWeight: '600' }}>Next Appointment</p>
+                  <h3 style={{ fontSize: '1.2rem', margin: '0.5rem 0' }}>{customerBookings.length > 0 ? customerBookings[0].date : 'None Scheduled'}</h3>
+                </div>
+                <div style={{ backgroundColor: '#FFF3E0', padding: '2rem', borderRadius: '16px', border: '1px solid #FFE0B2' }}>
+                  <p style={{ fontSize: '0.9rem', color: '#F57C00', fontWeight: '600' }}>Loyalty Points</p>
+                  <h3 style={{ fontSize: '2rem', margin: '0.5rem 0' }}>{customerBookings.length * 100}</h3>
+                </div>
               </div>
 
               <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', padding: '2.5rem', border: '1px solid var(--border-color)', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ marginBottom: '2rem', fontFamily: '"Playfair Display", serif' }}>Recent Appointments</h3>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                   <thead>
                     <tr style={{ borderBottom: '2px solid var(--border-color)' }}>
-                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Client</th>
                       <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Service</th>
-                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Date & Time</th>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</th>
+                      <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Price</th>
                       <th style={{ padding: '1.5rem', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Status</th>
-                      <th style={{ padding: '1.5rem', textAlign: 'right', color: 'var(--text-sub)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings.map((b) => (
-                      <tr key={b.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background-color 0.2s ease' }}>
-                        <td style={{ padding: '1.5rem' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                             <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                               {b.customer ? b.customer[0] : '?'}
-                             </div>
-                             <span style={{ fontWeight: '600' }}>{b.customer || 'Unknown Client'}</span>
-                          </div>
-                        </td>
-                        <td style={{ padding: '1.5rem' }}>{b.service}</td>
-                        <td style={{ padding: '1.5rem' }}>
-                          <p style={{ margin: 0, fontWeight: '500' }}>{b.date}</p>
-                          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{b.time}</p>
-                        </td>
+                    {customerBookings.map((b) => (
+                      <tr key={b.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                        <td style={{ padding: '1.5rem', fontWeight: '600' }}>{b.service_name}</td>
+                        <td style={{ padding: '1.5rem' }}>{b.date}</td>
+                        <td style={{ padding: '1.5rem' }}>{b.price}</td>
                         <td style={{ padding: '1.5rem' }}>
                           <span style={{ 
                             padding: '6px 12px', 
                             borderRadius: '20px', 
                             fontSize: '0.75rem', 
                             fontWeight: '700', 
-                            backgroundColor: b.status === 'Confirmed' ? '#E8F5E9' : '#FFF3E0',
-                            color: b.status === 'Confirmed' ? '#2E7D32' : '#EF6C00'
+                            backgroundColor: '#E8F5E9',
+                            color: '#2E7D32'
                           }}>
-                            {b.status}
+                            Confirmed
                           </span>
-                        </td>
-                        <td style={{ padding: '1.5rem', textAlign: 'right' }}>
-                          <button style={{ color: 'var(--text-muted)', fontSize: '1.1rem', cursor: 'pointer' }}>⋯</button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                {Object.keys(bookings).length === 0 && (
+                {customerBookings.length === 0 && (
                   <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                    <p>No active bookings found.</p>
+                    <p>No appointments found. Start your beauty journey today!</p>
                   </div>
                 )}
               </div>
@@ -498,6 +575,31 @@ function App() {
               </div>
 
               <div style={{ marginBottom: '5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                  <h3 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', margin: 0 }}>Service Management</h3>
+                  <button onClick={() => {
+                    const name = prompt('Service Name:');
+                    const price = prompt('Price (e.g. $50):');
+                    const duration = prompt('Duration (e.g. 45 min):');
+                    if (name && price) {
+                      handleAddService({ name, price, duration, staff: 'Samantha W.', img: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=400' });
+                    }
+                  }} className="btn-dark" style={{ padding: '0.6rem 1.5rem', borderRadius: '8px' }}>+ Add New Service</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+                  {services.map(svc => (
+                    <div key={svc.id} style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #ddd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ margin: 0 }}>{svc.name}</h4>
+                        <p style={{ margin: '0.2rem 0', color: 'var(--primary)', fontWeight: 'bold' }}>{svc.price}</p>
+                      </div>
+                      <button onClick={() => handleDeleteService(svc.id)} style={{ color: '#F44336', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>🗑</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '5rem' }}>
                 <h3 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', marginBottom: '2rem' }}>Customer List</h3>
                 <div style={{ backgroundColor: 'white', border: '1px solid #ddd', borderRadius: '4px', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -505,9 +607,8 @@ function App() {
                       <tr style={{ backgroundColor: '#F8F9FA', borderBottom: '1px solid #ddd' }}>
                         <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>#</th>
                         <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Name</th>
-                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Mobile Number</th>
                         <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Email</th>
-                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Registration Date</th>
+                        <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Last Visit</th>
                         <th style={{ padding: '1rem', color: '#333', fontSize: '0.9rem', fontWeight: '700' }}>Action</th>
                       </tr>
                     </thead>
@@ -516,14 +617,10 @@ function App() {
                         <tr key={c.id} style={{ borderBottom: '1px solid #eee' }}>
                            <td style={{ padding: '1rem' }}>{idx + 1}</td>
                            <td style={{ padding: '1rem', fontWeight: '600' }}>{c.name}</td>
-                           <td style={{ padding: '1rem' }}>{c.phone}</td>
-                           <td style={{ padding: '1rem' }}>{c.email}</td>
-                           <td style={{ padding: '1rem' }}>{c.regDate}</td>
+                           <td style={{ padding: '1rem' }}>{c.email || 'N/A'}</td>
+                           <td style={{ padding: '1rem' }}>{c.last_visit || 'Never'}</td>
                            <td style={{ padding: '1rem' }}>
-                              <div style={{ display: 'flex', gap: '8px' }}>
-                                 <button style={{ padding: '5px 10px', backgroundColor: '#3F51B5', color: 'white', border: 'none', borderRadius: '3px', fontSize: '0.7rem' }}>Assign Services</button>
-                                 <button style={{ padding: '5px 10px', backgroundColor: '#F44336', color: 'white', border: 'none', borderRadius: '3px', fontSize: '0.7rem' }}>Delete</button>
-                              </div>
+                              <button style={{ padding: '5px 10px', backgroundColor: '#F44336', color: 'white', border: 'none', borderRadius: '3px', fontSize: '0.7rem', cursor: 'pointer' }}>Remove</button>
                            </td>
                         </tr>
                       ))}
@@ -693,6 +790,7 @@ function App() {
         onClose={() => setIsBookingModalOpen(false)} 
         services={services} 
         onBookingSubmit={handleBookingSubmit}
+        userName={userName}
       />
       <main>
         {renderContent()}
